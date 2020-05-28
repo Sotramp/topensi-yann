@@ -47,7 +47,7 @@
                 <th scope="col">Etat</th>
                 <th scope="col">Facture</th>
                 <th scope="col">DateCreation</th>
-                <th scope="col">DateCloture</th>
+                <th scope="col">D
               </tr>
             </thead>
             <tbody>
@@ -58,17 +58,24 @@
                         <td class="client_td">{{cli.nom}}</td>
                     {% endif %}
                 {% endfor %}
-                    <td>{{ e.hostname }}</td>
-                    <td>{{ e.ip }}</td>
+                {% for part in partenaire %}
+                    {% if part.id == e.part_id %}
+                        <td class="partenaire_td">{{part.nom}}</td>
+                    {% endif %}
+                {% endfor %}
                 {% for typ in type %}
                     {% if typ.id == e.typ_id %}
                         <td class="type_td">{{typ.nom}}</td>
                     {% endif %}
                 {% endfor %}
-                    <td><a target="_blank" rel="noopener noreferrer" href="{{ e.url }}">{{ e.url }}</a></td>
+                    <td>{{ e.marge }}</td>
+                    <td>{{ e.recurrent }}</td>
+                    <td>{{ e.etat }}</td>
+                    <td>{{ e.facture }}</td>
+                    <td>{{ e.dateCreation }}</td>
+                    <td>{{ e.dateCloture }}</td>
                 </tr>
             {% endfor %}
-              </tr>
             </tbody>
           </table>
     </main>
