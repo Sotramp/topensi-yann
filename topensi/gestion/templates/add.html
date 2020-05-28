@@ -36,13 +36,21 @@
                 <label for="type">Ajouter partenaire</label>
                 <form action="/add/ajouter_partenaire/" method="post" id="form_partnaire">{% csrf_token %}
                 <div class="form-inline">
-                    <input type="text" name="partenaire" class="form-control col" id="type" placeholder="Entrez le partenaire">
+                    <input type="text" name="etat" class="form-control col" id="type" placeholder="Entrez le partenaire">
                     <button type="submit" form="form_partnaire" class="btn btn-primary">Valider</button></form>
+                </div>
+            </div>
+            <div class="form-group col">
+                <label for="type">Ajouter etat</label>
+                <form action="/add/ajouter_etat/" method="post" id="form_etat">{% csrf_token %}
+                <div class="form-inline">
+                    <input type="text" name="etat" class="form-control col" id="type" placeholder="Entrez le etat">
+                    <button type="submit" form="form_etat" class="btn btn-primary">Valider</button></form>
                 </div>
             </div>
             </div>
             <div class="row">
-            <form action="/add/ajouter_info/" method="post" id="form_info">{% csrf_token %}
+            <form action="/add/ajouter_info/" method="post" id="form_info" class="w-100">{% csrf_token %}
             <div class="form-group col">
                 <label for="exampleInputEmail1">Ajouter entrée</label>
                 <div class="form-inline">
@@ -58,7 +66,7 @@
                             <option value="{{e.nom}}">{{e.nom}}</option>
                         {% endfor %}
                     </select>
-                    <select class="custom-select" name="type">
+                    <select class="custom-select col" name="type">
                         <option selected>Selectionnez le type</option>
                         {% for e in type %}
                             <option value="{{e.nom}}">{{e.nom}}</option>
@@ -67,10 +75,18 @@
                 </div>
                 <div class="form-inline">
                     <input type="text" name="marge" class="form-control col" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Marge">
-                    <input type="text" name="hostname" class="form-control col" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nom d'hôte">
-                    <input type="text" name="ip" class="form-control col" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Adresse IP">
-
-                    <input type="text" name="url" class="form-control col" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="URL sous forme https://x/"></form>
+                    <input type="text" name="recurrent" class="form-control col" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Récurrent">
+                    <select class="custom-select col" name="etat">
+                        {% for e in etat %}
+                            <option value="{{e.nom}}">{{e.nom}}</option>
+                        {% endfor %}
+                    </select>
+                    <select class="custom-select col" name="facture">
+                        <option value="False" selected>Non facturé</option>
+                        <option value="True">Facturé</option>
+                    </select>
+                    <input type="date" name="dateCreation" class="form-control col">
+                    <input type="date" name="dateCloture" class="form-control col">
                 </div>
             </div>
         </div>

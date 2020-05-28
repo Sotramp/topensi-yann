@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.conf import settings
 from gestion.models import Info
+from gestion.models import Etat
 from gestion.models import Client
 from gestion.models import Partenaire
 from gestion.models import Type
@@ -19,8 +20,9 @@ class IndexView(TemplateView):
     info = Info.objects.all()
     client = Client.objects.all()
     partenaire = Partenaire.objects.all()
+    etat = Etat.objects.all()
     type = Type.objects.all()
-    return render(request, self.template_name, {'info' : info, 'client': client, 'partenaire': partenaire, 'type' : type})
+    return render(request, self.template_name, {'info' : info, 'client': client, 'partenaire': partenaire, 'type' : type, 'etat': etat})
 
 class AddView(TemplateView):
   template_name = 'add.html'
@@ -28,8 +30,9 @@ class AddView(TemplateView):
     info = Info.objects.all()
     client = Client.objects.all()
     partenaire = Partenaire.objects.all()
+    etat = Etat.objects.all()
     type = Type.objects.all()
-    return render(request, self.template_name, {'info' : info, 'client': client, 'partenaire': partenaire, 'type' : type})
+    return render(request, self.template_name, {'info' : info, 'client': client, 'partenaire': partenaire, 'type' : type, 'etat': etat})
 
 class UpdateView(TemplateView):
   template_name = 'update.html'
@@ -37,8 +40,9 @@ class UpdateView(TemplateView):
     info = Info.objects.all()
     client = Client.objects.all()
     partenaire = Partenaire.objects.all()
+    etat = Etat.objects.all()
     type = Type.objects.all()
-    return render(request, self.template_name, {'info' : info, 'client': client, 'partenaire': partenaire, 'type' : type})
+    return render(request, self.template_name, {'info' : info, 'client': client, 'partenaire': partenaire, 'type' : type, 'etat': etat})
 
 class AjouterPartenaireView(TemplateView):
   template_name = "index.html"
@@ -78,3 +82,35 @@ class AjouterTypeView(TemplateView):
     except:
       messages.error(request, "Impossible de créer un type")
       return HttpResponseRedirect( "/add/" )
+
+class AjouterEtatView(TemplateView):
+  template_name = "index.html"
+  def post(self, request, **kwargs):
+    type = request.POST.get('etat', False)
+    print(type)
+    c = Etat(nom=type)
+    c.save()
+    messages.success(request, 'Le etat a bien été ajouté')
+    return HttpResponseRedirect( "/add/" )
+
+class AjouterInfoView(TemplateView):
+  template_name = "index.html"
+  def post(self, request, **kwargs):
+    client = request.POST.get('client', False)
+    client_id = Client.objects.get(nom=client)
+    partenaire = request.POST.get('partenaire', False) 
+    partenaire_id = Partenaire.objects.get(nom=partenaire)
+    type = request.POST.get('type', False)
+    type_id = Type.objects.get(nom=type)
+    etat = request.POST.get('etat', False)
+    print(etat)
+    etat_id = Etat.objects.get(nom=etat)
+    marge = request.POST.get('marge', False)
+    recurrent = request.POST.get('recurrent', False)
+    facture = request.POST.get('facture', False)
+    dateCreation = request.POST.get('dateCreation', False)
+    dateCloture = request.POST.get('dateCloture', False)
+    i = Info(cli=client_id, partenaire=partenaire_id, typ=type_id, etat=etat_id,marge=marge, recurrent=recurrent, facture=facture, dateCloture = dateCloture, dateCreation = dateCreation)
+    i.save()
+    messages.success(request, "L'info a bien été ajoutée")
+    return HttpResponseRedirect( "/add/" )

@@ -9,13 +9,16 @@ class Partenaire(models.Model):
 class Type(models.Model):
     nom = models.CharField(max_length=50, unique=True)
 
+class Etat(models.Model):
+    nom = models.CharField(max_length=50, unique=True)
+
 class Info(models.Model):
     cli = models.ForeignKey(Client, on_delete=models.CASCADE)
     partenaire = models.ForeignKey(Partenaire, on_delete=models.CASCADE)
     typ = models.ForeignKey(Type, on_delete=models.CASCADE)
     marge = models.FloatField()
     recurrent = models.FloatField()
-    etat = models.BooleanField()
+    etat = models.ForeignKey(Etat, on_delete=models.CASCADE)
     facture = models.BooleanField()
     dateCreation = models.DateField()
     dateCloture = models.DateField()

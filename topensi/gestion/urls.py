@@ -14,5 +14,7 @@ urlpatterns = [
     url(r'^add/ajouter_client/$', AjouterClientView.as_view()),
     url(r'^add/ajouter_type/$', AjouterTypeView.as_view()),
     url(r'^add/ajouter_partenaire/$', AjouterPartenaireView.as_view()),
+    url(r'^add/ajouter_etat/$', AjouterEtatView.as_view()),
+    url(r'^add/ajouter_info/$', AjouterInfoView.as_view()),
 
 ]
