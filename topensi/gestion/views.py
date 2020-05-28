@@ -13,3 +13,8 @@ class IndexView(TemplateView):
   template_name = 'index.html'
   def get(self, request, **kwargs):
     return render(request, self.template_name)
+
+class AddView(TemplateView):
+  template_name = 'add.html'
+  def get(self, request, **kwargs):
+    return render(request, self.template_name)
