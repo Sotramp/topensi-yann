@@ -8,5 +8,5 @@ from django.views.generic import TemplateView
 from lister.views import *
 
 urlpatterns = [
-    url(r'^$', LoginView.as_view()),
+    url(r'^$', IndexView.as_view()),
 ]
