@@ -10,4 +10,5 @@ from gestion.views import *
 urlpatterns = [
     url(r'^$', IndexView.as_view()),
     url(r'^add/$', AddView.as_view()),
+    url(r'^update/$', UpdateView.as_view()),
 ]
