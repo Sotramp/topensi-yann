@@ -32,23 +32,45 @@
                     <button type="submit" form="form_type" class="btn btn-primary">Valider</button></form>
                 </div>
             </div>
+            <div class="form-group col">
+                <label for="type">Ajouter partenaire</label>
+                <form action="/add/ajouter_partenaire/" method="post" id="form_partnaire">{% csrf_token %}
+                <div class="form-inline">
+                    <input type="text" name="partenaire" class="form-control col" id="type" placeholder="Entrez le partenaire">
+                    <button type="submit" form="form_partnaire" class="btn btn-primary">Valider</button></form>
+                </div>
+            </div>
             </div>
             <div class="row">
             <form action="/add/ajouter_info/" method="post" id="form_info">{% csrf_token %}
             <div class="form-group col">
                 <label for="exampleInputEmail1">Ajouter entrée</label>
                 <div class="form-inline">
-                    <select class="custom-select" name="client">
+                    <select class="custom-select col" name="client">
                         <option selected>Selectionnez le client</option>
+                        {% for e in client %}
                             <option value="{{e.nom}}">{{e.nom}}</option>
+                        {% endfor %}
                     </select>
-                    <input type="text" name="hostname" class="form-control col mx-2" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nom d'hôte">
-                    <input type="text" name="ip" class="form-control col mx-2" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Adresse IP">
+                    <select class="custom-select col" name="partenaire">
+                        <option selected>Selectionnez le partenaire</option>
+                        {% for e in partenaire %}
+                            <option value="{{e.nom}}">{{e.nom}}</option>
+                        {% endfor %}
+                    </select>
                     <select class="custom-select" name="type">
                         <option selected>Selectionnez le type</option>
+                        {% for e in type %}
                             <option value="{{e.nom}}">{{e.nom}}</option>
+                        {% endfor %}
                     </select>
-                    <input type="text" name="url" class="form-control col mx-2" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="URL sous forme https://x/"></form>
+                </div>
+                <div class="form-inline">
+                    <input type="text" name="marge" class="form-control col" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Marge">
+                    <input type="text" name="hostname" class="form-control col" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nom d'hôte">
+                    <input type="text" name="ip" class="form-control col" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Adresse IP">
+
+                    <input type="text" name="url" class="form-control col" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="URL sous forme https://x/"></form>
                 </div>
             </div>
         </div>
