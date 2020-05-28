@@ -47,7 +47,7 @@
                 <th scope="col">Etat</th>
                 <th scope="col">Facture</th>
                 <th scope="col">DateCreation</th>
-                <th scope="col">D
+                <th scope="col">DateCloture</th>
               </tr>
             </thead>
             <tbody>
@@ -70,7 +70,11 @@
                 {% endfor %}
                     <td>{{ e.marge }}</td>
                     <td>{{ e.recurrent }}</td>
-                    <td>{{ e.etat }}</td>
+                {% for etat in etat %}
+                    {% if etat.id == e.etat_id %}
+                        <td class="etat_td">{{etat.nom}}</td>
+                    {% endif %}
+                {% endfor %}
                     <td>{{ e.facture }}</td>
                     <td>{{ e.dateCreation }}</td>
                     <td>{{ e.dateCloture }}</td>
