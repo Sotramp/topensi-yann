@@ -19,5 +19,3 @@ class Info(models.Model):
     facturé = models.CharField(max_length=100)
     dateCreation = models.DateField(max_length=100)
     dateCloture = models.DateField(max_length=100)
-
-ok
