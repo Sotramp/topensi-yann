@@ -1,0 +1,58 @@
+{% load static %}
+
+    {% block content %}
+    <main role="main" class="container">
+        <div class="row">
+            <div class="input-group mt-5 col">
+                <select class="custom-select" id="client" aria-label="Selectionnez le client">
+                  <option selected>Tous les clients</option>
+                  {% for cli in client %}
+                    <option value="{{cli.nom}}">{{cli.nom}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="input-group mt-5 col">
+                <select class="custom-select" id="type" aria-label="Example select with button addon">
+                  <option selected>Tous les types</option>
+                  {% for typ in type %}
+                    <option value="{{typ.nom}}">{{typ.nom}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+        </div>
+        
+
+        <table class="table table-bordered mt-5">
+            <thead><br>
+              <tr>
+                <th scope="col">Client</th>
+                <th scope="col">Nom d'hôte</th>
+                <th scope="col">Adresse IP</th>
+                <th scope="col">Type</th>
+                <th scope="col">URL</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for e in info %}
+                <tr>
+                {% for cli in client %}
+                    {% if cli.id == e.cli_id %}
+                        <td class="client_td">{{cli.nom}}</td>
+                    {% endif %}
+                {% endfor %}
+                    <td>{{ e.hostname }}</td>
+                    <td>{{ e.ip }}</td>
+                {% for typ in type %}
+                    {% if typ.id == e.typ_id %}
+                        <td class="type_td">{{typ.nom}}</td>
+                    {% endif %}
+                {% endfor %}
+                    <td><a target="_blank" rel="noopener noreferrer" href="{{ e.url }}">{{ e.url }}</a></td>
+                </tr>
+            {% endfor %}
+              </tr>
+            </tbody>
+          </table>
+    </main>
+
+    {% endblock %}

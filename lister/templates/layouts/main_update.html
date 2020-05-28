@@ -1,0 +1,80 @@
+{% load static %}
+
+    {% block content %}
+    <main role="main" class="container">
+        <table class="table table-bordered mt-5">
+            <thead><br>
+              <tr>
+                <th scope="col">Client</th>
+                <th scope="col">Nom d'hôte</th>
+                <th scope="col">Adresse IP</th>
+                <th scope="col">Type</th>
+                <th scope="col">URL</th>
+                <th scope="col">Modifier</th>
+                <th scope="col">Supprimer</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for e in info %}
+                <tr>
+                <form method="post" action="/update/delete/" id="form-del{{e.id}}">
+                    {% csrf_token %}
+                    <input type="hidden" name="info_id" value="{{e.id}}"/>
+                </form>
+                <form method="post" action="/update/maj/" id="form-maj{{e.id}}">{% csrf_token %}
+                {% for cli in client %}
+                    {% if cli.id == e.cli_id %}
+                        <td class="client_td">{{cli.nom}}</td>
+                    {% endif %}
+                {% endfor %}
+                    <td>{{ e.hostname }}</td>
+                    <td>{{ e.ip }}</td>
+                {% for typ in type %}
+                    {% if typ.id == e.typ_id %}
+                        <td class="type_td">{{typ.nom}}</td>
+                    {% endif %}
+                {% endfor %}
+                    <td><a href="{{ e.url }}">{{ e.url }}</a></td>
+                    <td><button type="submit" form="form-maj{{e.id}}" class="btn btn-secondary modifier">Modifier</button></td></form>
+                    <td><button type="submit" form="form-del{{e.id}}" class="btn btn-danger">Supprimer</button></td>
+                </tr>
+            {% endfor %}
+              </tr>
+            </tbody>
+          </table>
+          <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+          <script>
+    $(".modifier").click(function() {
+        id = $(this).attr('form')
+        $(this).parent().parent().eq(0).find("td").each(function(x,cpt){
+            if(x == 0){
+                before = $(this).text()
+                $(this).html('<select class="custom-select"  form="'+id+'" name="client"><option>Selectionnez le client</option>{% for e in client %}<option>{{e.nom}}</option>{% endfor %}</select>')
+                $(this).find("option").each(function(){
+                    if($(this).text() == before){
+                        $(this).prop("selected", "selected")
+                    }
+                })
+            } else if(x == 1){
+                $(this).html("<input name='hostname'  form='"+id+"' type='text' value ='"+$(this).html()+"'/>")
+            } else if(x == 2){
+                $(this).html("<input name='ip' form='"+id+"' type='text' value ='"+$(this).html()+"'/>")
+            } else if(x == 3){
+                before = $(this).text()
+                $(this).html('<select class="custom-select"  form="'+id+'" name="type"><option>Selectionnez le type</option>{% for e in type %}<option>{{e.nom}}</option>{% endfor %}</select>')
+                $(this).find("option").each(function(){
+                    if($(this).text() == before){
+                        $(this).prop("selected", "selected")
+                    }
+                })
+            } else if(x == 4){
+                $(this).html("<input type='text' form='"+id+"' name='url' value ='"+$(this).text()+"'/>")
+            } else if(x == 5){
+                idform = id.replace("form-maj","")
+                $(this).html('<input type="hidden" form="'+id+'" name="formid" value="'+idform+'" /> <button type="submit" form="'+id+'" class="btn btn-success mt-2 my-sm-0">Valider</button>')
+            }
+        })
+      });
+    </script>
+    </main>
+    {% endblock %}

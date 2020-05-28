@@ -1,0 +1,22 @@
+{% load static %}
+
+<!-- Application pour lister les postes chez Topensi -->
+<!DOCTYPE html>
+<html>
+<head>  
+    <meta charset="UTF-8">
+    <title>Topensi - {% block title %}Accueil{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link href="{% static 'css/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+    <!-- Header -->
+    {% include 'layouts/header.html' %}
+
+    <!-- Contenu -->
+    {% include 'layouts/main_add.html' %}
+
+    <!-- Footer -->
+    {% include 'layouts/footer.html' %}
