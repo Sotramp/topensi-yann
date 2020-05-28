@@ -26,10 +26,26 @@
                 </select>
               </div>
               <div class="input-group mt-5 col">
+                <select class="custom-select" id="partenaire" aria-label="Selectionnez le partenaire">
+                  <option selected>Tous les partenaires</option>
+                  {% for part in partenaire %}
+                    <option value="{{part.nom}}">{{part.nom}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="input-group mt-5 col">
                 <select class="custom-select" id="type" aria-label="Example select with button addon">
                   <option selected>Tous les types</option>
                   {% for typ in type %}
                     <option value="{{typ.nom}}">{{typ.nom}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="input-group mt-5 col">
+                <select class="custom-select" id="etat" aria-label="Example select with button addon">
+                  <option selected>Tous les états</option>
+                  {% for etat in etat %}
+                    <option value="{{etat.nom}}">{{etat.nom}}</option>
                   {% endfor %}
                 </select>
               </div>
