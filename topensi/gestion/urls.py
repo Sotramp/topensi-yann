@@ -5,7 +5,7 @@ from . import views
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
-from lister.views import *
+from gestion.views import *
 
 urlpatterns = [
     url(r'^$', IndexView.as_view()),
