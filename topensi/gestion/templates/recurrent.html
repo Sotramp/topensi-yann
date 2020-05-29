@@ -107,7 +107,7 @@
                     $(this).parent().parent().eq(0).find("td").each(function(x,cpt){
                         if(x == 5){
                             console.log($(this).text())
-                            if($(this).text() != "None"){
+                            if($(this).text() != "None" && $(this).text() !=""){
                                 $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='dateinstallation' value ='"+`${da}-${mo}-${ye}`+"'/>")   
                             } else {
                                 $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='dateinstallation'/>")   
