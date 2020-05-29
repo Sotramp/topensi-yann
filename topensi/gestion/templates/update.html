@@ -119,10 +119,17 @@
                     }
                 })
             } else if(x == 7){
-                console.log($(this).text()) 
-                $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='datecreation' value ='"+$(this).text()+"'/>")    
+                d = new Date($(this).text())
+                ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+                mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(d)
+                da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(d)
+                $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='datecreation' value ='"+`${ye}-${mo}-${da}`+"'/>")    
             } else if(x == 8){
-                $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='datecloture' value ='"+$(this).text()+"'/>")
+                d = new Date($(this).text())
+                ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+                mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(d)
+                da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(d)
+                $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='datecloture' value ='"+`${ye}-${mo}-${da}`+"'/>")    
             } else if(x == 9){
                 idform = id.replace("form-maj","")
                 $(this).html('<input type="hidden" form="'+id+'" name="formid" value="'+idform+'" /> <button type="submit" form="'+id+'" class="btn btn-success mt-2 my-sm-0">Valider</button>')
