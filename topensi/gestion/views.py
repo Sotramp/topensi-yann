@@ -121,3 +121,39 @@ class AjouterInfoView(TemplateView):
     except:
       messages.error(request, "Impossible d'ajouter l'info")
       return HttpResponseRedirect( "/add/" )
+
+class DeleteInfo(TemplateView):
+  template_name = 'update.html'
+  def post(self, request, **kwargs):
+    infoid = request.POST.get('info_id', False)
+    Info.objects.filter(id=infoid).delete()
+    messages.success(request, "L'info a bien été supprimée")
+    return HttpResponseRedirect( "/update/" )
+
+class UpdateInfo(TemplateView):
+  template_name = 'update.html'
+  def post(self, request, **kwargs):
+    recurrent = request.POST.get('recurrent', False)  
+    marge = request.POST.get('marge', False)
+    facture = request.POST.get('facture', False)
+    #dateCloture = request.POST.get('datecloture', False)
+    #dateCreation = request.POST.get('datecreation', False)  
+    clientnom = request.POST.get('client', False)
+    partenairenom = request.POST.get('partenaire', False)
+    typenom = request.POST.get('type', False)
+    etatnom = request.POST.get('etat', False)
+    clientid = Client.objects.get(nom=clientnom).id
+    partenaireid = Partenaire.objects.get(nom=partenairenom).id
+    typeid = Type.objects.get(nom=typenom).id
+    etatid = Etat.objects.get(nom=etatnom).id
+    #except:
+    #messages.error(request, 'Mauvaise saisie')
+    #return HttpResponseRedirect( "/update/" )
+    formid = request.POST.get('formid', False)
+    #try:
+    Info.objects.filter(id=formid).update(recurrent=recurrent, facture=facture, marge=marge, dateCloture=dateCloture, dateCreation=dateCreation, cli_id=clientid, typ_id = typeid, partenaire_id=partenaireid, etat_id=etatid) 
+    messages.success(request, "L'info a bien été modifiée")
+    return HttpResponseRedirect( "/update/" )
+    #except:
+      #messages.error(request, "Impossible de mettre a jour l'info")
+      #return HttpResponseRedirect( "/update/" )
