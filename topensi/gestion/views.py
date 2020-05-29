@@ -126,14 +126,17 @@ class AjouterInfoView(TemplateView):
     facture = request.POST.get('facture', False)
     dateCreation = request.POST.get('dateCreation', False)
     dateCloture = request.POST.get('dateCloture', False)
-    try:
-      i = Info(cli=client_id, partenaire=partenaire_id, typ=type_id, etat=etat_id,marge=marge, recurrent=recurrent, facture=facture, dateCloture = dateCloture, dateCreation = dateCreation)
-      i.save()
-      messages.success(request, "L'info a bien été ajoutée")
-      return HttpResponseRedirect( "/add/" )
-    except:
-      messages.error(request, "Impossible d'ajouter l'info")
-      return HttpResponseRedirect( "/add/" )
+    print(dateCloture)
+    #try:
+    if(dateCloture == ''):
+      dateCloture = "1970-01"
+    i = Info(cli=client_id, partenaire=partenaire_id, typ=type_id, etat=etat_id,marge=marge, recurrent=recurrent, facture=facture, dateCloture = dateCloture, dateCreation = dateCreation)
+    i.save()
+    messages.success(request, "L'info a bien été ajoutée")
+    return HttpResponseRedirect( "/add/" )
+    #except:
+    #  messages.error(request, "Impossible d'ajouter l'info")
+    #  return HttpResponseRedirect( "/add/" )
 
 class FilterInfoView(TemplateView):
   template_name = "index.html"

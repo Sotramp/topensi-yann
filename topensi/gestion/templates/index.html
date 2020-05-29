@@ -75,19 +75,19 @@
           <div class="col">
             <label>Date de création :</label>
             <div class="input-group mt-2">
-                <input type="date" name="dateDebutCreation" class="form-control col">
+                <input type="month" name="dateDebutCreation" class="form-control col">
             </div>
             <div class="input-group mt-2">
-                <input type="date" name="dateFinCreation" class="form-control col">
+                <input type="month" name="dateFinCreation" class="form-control col">
             </div>
           </div>
           <div class="col">
             <label>Date de cloture :</label>
             <div class="input-group mt-2">
-                <input type="date" name="dateDebutCloture"  class="form-control col">
+                <input type="month" name="dateDebutCloture"  class="form-control col">
             </div>
             <div class="input-group mt-2">
-                <input type="date" name="dateFinCloture" class="form-control col">
+                <input type="month" name="dateFinCloture" class="form-control col">
             </div>
           </div>
         </div>
@@ -107,45 +107,53 @@
               </tr>
             </thead>
             <tbody>
-            {% for e in info %}
-                <tr>
-                {% for cli in client %}
-                    {% if cli.id == e.cli_id %}
-                        <td class="client_td">{{cli.nom}}</td>
-                    {% endif %}
-                {% endfor %}
-                {% for part in partenaire %}
-                    {% if part.id == e.partenaire_id %}
-                        <td class="partenaire_td">{{part.nom}}</td>
-                    {% endif %}
-                {% endfor %}
-                {% for typ in type %}
-                    {% if typ.id == e.typ_id %}
-                        <td class="type_td">{{typ.nom}}</td>
-                    {% endif %}
-                {% endfor %}
-                    <td>{{ e.marge }}</td>
-                    <td>{{ e.recurrent }}</td>
-                {% for etat in etat %}
-                    {% if etat.id == e.etat_id %}
-                        <td class="etat_td">{{etat.nom}}</td>
-                    {% endif %}
-                {% endfor %}
-                    <td>{% if e.facture %}Oui{% else %}Non{% endif %}</td>
-                    <td><script>
-                      d = new Date("{{e.dateCreation}}")
-                      ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
-                      mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
-                      document.write(`${mo} ${ye}`);
-                    </script></td>
-                    <td><script>
-                      d = new Date("{{e.dateCloture}}")
-                      ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
-                      mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
-                      document.write(`${mo} ${ye}`);
-                    </script></td>
-                </tr>
-            {% endfor %}
+            {% if not info %}
+              <tr><td colspan='8'>Aucune donnée<td></tr>            
+            {% else %}
+              {% for e in info %}
+                  <tr>
+                  {% for cli in client %}
+                      {% if cli.id == e.cli_id %}
+                          <td class="client_td">{{cli.nom}}</td>
+                      {% endif %}
+                  {% endfor %}
+                  {% for part in partenaire %}
+                      {% if part.id == e.partenaire_id %}
+                          <td class="partenaire_td">{{part.nom}}</td>
+                      {% endif %}
+                  {% endfor %}
+                  {% for typ in type %}
+                      {% if typ.id == e.typ_id %}
+                          <td class="type_td">{{typ.nom}}</td>
+                      {% endif %}
+                  {% endfor %}
+                      <td>{{ e.marge }}</td>
+                      <td>{{ e.recurrent }}</td>
+                  {% for etat in etat %}
+                      {% if etat.id == e.etat_id %}
+                          <td class="etat_td">{{etat.nom}}</td>
+                      {% endif %}
+                  {% endfor %}
+                      <td>{% if e.facture %}Oui{% else %}Non{% endif %}</td>
+                      <td><script>
+                        d = new Date("{{e.dateCreation}}")
+                        ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
+                        mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
+                        document.write(`${mo} ${ye}`);
+                      </script></td>
+                      <td><script>
+                        d = new Date("{{e.dateCloture}}")
+                        ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
+                        mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
+                        if(`${mo} ${ye}` == "janv. 1970"){
+                          document.write("Pas encore cloturé");
+                        } else {
+                          document.write(`${mo} ${ye}`);
+                        }
+                      </script></td>
+                  </tr>
+              {% endfor %}
+            {% endif %}
             </tbody>
           </table>
     </main>
