@@ -47,6 +47,16 @@ class UpdateView(TemplateView):
     type = Type.objects.all()
     return render(request, self.template_name, {'info' : info, 'client': client, 'partenaire': partenaire, 'type' : type, 'etat': etat})
 
+class RecurrentView(TemplateView):
+  template_name = 'recurrent.html'
+  def get(self, request, **kwargs):
+    info = Info.objects.all()
+    client = Client.objects.all()
+    partenaire = Partenaire.objects.all()
+    etat = Etat.objects.all()
+    type = Type.objects.all()
+    return render(request, self.template_name, {'info' : info, 'client': client, 'partenaire': partenaire, 'type' : type, 'etat': etat})
+
 class AjouterPartenaireView(TemplateView):
   template_name = "index.html"
   def post(self, request, **kwargs):
