@@ -57,6 +57,36 @@ class RecurrentView(TemplateView):
     type = Type.objects.all()
     return render(request, self.template_name, {'info' : info, 'client': client, 'partenaire': partenaire, 'type' : type, 'etat': etat})
 
+class AddView(TemplateView):
+  template_name = 'add.html'
+  def get(self, request, **kwargs):
+    info = Info.objects.all()
+    client = Client.objects.all()
+    partenaire = Partenaire.objects.all()
+    etat = Etat.objects.all()
+    type = Type.objects.all()
+    return render(request, self.template_name, {'info' : info, 'client': client, 'partenaire': partenaire, 'type' : type, 'etat': etat})
+
+class UpdateView(TemplateView):
+  template_name = 'update.html'
+  def get(self, request, **kwargs):
+    info = Info.objects.all()
+    client = Client.objects.all()
+    partenaire = Partenaire.objects.all()
+    etat = Etat.objects.all()
+    type = Type.objects.all()
+    return render(request, self.template_name, {'info' : info, 'client': client, 'partenaire': partenaire, 'type' : type, 'etat': etat})
+
+class ResumeView(TemplateView):
+  template_name = 'resume.html'
+  def get(self, request, **kwargs):
+    info = Info.objects.all()
+    client = Client.objects.all()
+    partenaire = Partenaire.objects.all()
+    etat = Etat.objects.all()
+    type = Type.objects.all()
+    return render(request, self.template_name, {'info' : info, 'client': client, 'partenaire': partenaire, 'type' : type, 'etat': etat})
+
 class AjouterPartenaireView(TemplateView):
   template_name = "index.html"
   def post(self, request, **kwargs):
