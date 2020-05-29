@@ -33,6 +33,11 @@
             <tbody>
                 {% for e in info %}
                 <tr>
+                <form method="post" action="/update/delete/" id="form-del{{e.id}}">
+                    {% csrf_token %}
+                    <input type="hidden" name="info_id" value="{{e.id}}"/>
+                    </form>
+                <form method="post" action="/update/maj/" id="form-maj{{e.id}}">{% csrf_token %}
                 {% for cli in client %}
                     {% if cli.id == e.cli_id %}
                         <td class="client_td">{{cli.nom}}</td>
@@ -107,14 +112,15 @@
                 })
             } else if(x == 6){
                 before = $(this).text()
-                $(this).html('<select style="width : 100%;"class="custom-select"  form="'+id+'" name="etat"><option>Selectionnez état</option>{% for e in info %}<option>{{e.facture}}</option>{% endfor %}</select>')
+                $(this).html('<select style="width : 100%;"class="custom-select"  form="'+id+'" name="facture"><option>Selectionnez facture</option>{% for e in info %}<option>{{e.facture}}</option>{% endfor %}</select>')
                 $(this).find("option").each(function(){
                     if($(this).text() == before){
                         $(this).prop("selected", "selected")
                     }
                 })
             } else if(x == 7){
-                $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='datecreation' value ='"+$(this).text()+"'/>")
+                console.log($(this).text()) 
+                $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='datecreation' value ='"+$(this).text()+"'/>")    
             } else if(x == 8){
                 $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='datecloture' value ='"+$(this).text()+"'/>")
             } else if(x == 9){
