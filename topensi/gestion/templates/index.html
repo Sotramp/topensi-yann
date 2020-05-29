@@ -16,215 +16,221 @@
 
     <!-- Contenu -->
     <main role="main" class="container">
-      <div class="card position-fixed" style="width: 10rem; right:0px;">
-        <div class="card-body">
-          <h5 class="card-title">Total</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Marges</h6>
-          <p class="card-text marge-total">
-            <script>
-            document.write({% for e in info %}
-            +{{e.marge}}
-            {% endfor %}
-            );
-            </script> €</p>
-          <h6 class="card-subtitle mb-2 text-muted">Récurrent</h6>
-          <p class="card-text recurrent-total"><script>
-            document.write({% for e in info %}
-            +{{e.recurrent}}
-            {% endfor %}
-            );
-            </script> €</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="mt-5 col input-group">
-          <h4>Filtres</h4>
-        </div>
-      </div>
-        <div class="row">
-            <div class="input-group mt-2 col">
-                <select class="custom-select" id="client" aria-label="Selectionnez le client">
-                  <option value="False" selected>Tous les clients</option>
-                  {% for cli in client %}
-                    <option value="{{cli.id}}">{{cli.nom}}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="input-group mt-2 col">
-                <select class="custom-select" id="partenaire" aria-label="Selectionnez le partenaire">
-                  <option value="False" selected>Tous les partenaires</option>
-                  {% for part in partenaire %}
-                    <option value="{{part.id}}">{{part.nom}}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="input-group mt-2 col">
-                <select class="custom-select" id="type" aria-label="Example select with button addon">
-                  <option value="False" selected>Tous les types</option>
-                  {% for typ in type %}
-                    <option value="{{typ.id}}">{{typ.nom}}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="input-group mt-2 col">
-                <select class="custom-select" id="etat" aria-label="Example select with button addon">
-                  <option value="False" selected>Tous les états</option>
-                  {% for etat in etat %}
-                    <option value="{{etat.id}}">{{etat.nom}}</option>
-                  {% endfor %}
-                </select>
-              </div>
-        </div>
-        
-        <div class="row mt-3">
-          <div class="col">
-            <h5>Date de création :</h5>
-            <div class="form-group mt-2">
-                <label>Début</label>
-                <input type="month" name="dateDebutCreation" id="dateDebutCreation" class="form-control col">
-            </div>
-            <div class="form-group mt-2">
-                <label>Fin</label>
-                <input type="month" name="dateFinCreation" id="dateFinCreation" class="form-control col">
-            </div>
-          </div>
-          <div class="col">
-            <h5>Date de cloture :</h5>
-            <div class="form-group mt-2">
-                <label>Début</label>
-                <input type="month" name="dateDebutCloture" id="dateDebutCloture" class="form-control col">
-            </div>
-            <div class="form-group mt-2">
-                <label>Fin</label>
-                <input type="month" name="dateFinCloture" id="dateFinCloture" class="form-control col">
-            </div>
-          </div>
-        </div>
-              
-        <table class="table table-striped table-bordered mt-5">
-            <thead><br>
-              <tr>
-                <th scope="col">Client</th>
-                <th scope="col">Partenaire</th>
-                <th scope="col">Type</th>
-                <th scope="col">Marge</th>
-                <th scope="col">Récurrent</th>
-                <th scope="col">Etat</th>
-                <th scope="col">Facture</th>
-                <th scope="col">Date de création</th>
-                <th scope="col">Date de cloture</th>
-              </tr>
-            </thead>
-            <tbody>
-            {% if not info %}
-              <tr><td colspan='8'>Aucune donnée<td></tr>            
-            {% else %}
-              {% for e in info %}
-                  <tr>
-                  {% for cli in client %}
-                      {% if cli.id == e.cli_id %}
-                          <td class="client_td">{{cli.nom}}</td>
-                      {% endif %}
-                  {% endfor %}
-                  {% for part in partenaire %}
-                      {% if part.id == e.partenaire_id %}
-                          <td class="partenaire_td">{{part.nom}}</td>
-                      {% endif %}
-                  {% endfor %}
-                  {% for typ in type %}
-                      {% if typ.id == e.typ_id %}
-                          <td class="type_td">{{typ.nom}}</td>
-                      {% endif %}
-                  {% endfor %}
-                      <td>{{ e.marge }}</td>
-                      <td>{{ e.recurrent }}</td>
-                  {% for etat in etat %}
-                      {% if etat.id == e.etat_id %}
-                          <td class="etat_td">{{etat.nom}}</td>
-                      {% endif %}
-                  {% endfor %}
-                      <td>{% if e.facture %}Oui{% else %}Non{% endif %}</td>
-                      <td><script>
-                        d = new Date("{{e.dateCreation}}")
-                        ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
-                        mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
-                        document.write(`${mo} ${ye}`);
-                      </script></td>
-                      <td><script>
-                        d = new Date("{{e.dateCloture}}")
-                        ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
-                        mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
-                        if(`${mo} ${ye}` == "janv. 1970"){
-                          document.write("Pas encore cloturé");
-                        } else {
-                          document.write(`${mo} ${ye}`);
-                        }
-                      </script></td>
-                  </tr>
+      <div class="container">
+        <div class="card position-fixed" style="width: 10rem; right:0px;">
+          <div class="card-body">
+            <h5 class="card-title">Total</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Marges</h6>
+            <p class="card-text marge-total">
+              <script>
+              document.write({% for e in info %}
+              +{{e.marge}}
               {% endfor %}
-            {% endif %}
-            </tbody>
-          </table>
+              );
+              </script> €</p>
+            <h6 class="card-subtitle mb-2 text-muted">Récurrent</h6>
+            <p class="card-text recurrent-total"><script>
+              document.write({% for e in info %}
+              +{{e.recurrent}}
+              {% endfor %}
+              );
+              </script> €</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="mt-5 col input-group">
+            <h4>Filtres</h4>
+          </div>
+        </div>
+          <div class="row">
+              <div class="input-group mt-2 col">
+                  <select class="custom-select" id="client" aria-label="Selectionnez le client">
+                    <option value="False" selected>Tous les clients</option>
+                    {% for cli in client %}
+                      <option value="{{cli.id}}">{{cli.nom}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="input-group mt-2 col">
+                  <select class="custom-select" id="partenaire" aria-label="Selectionnez le partenaire">
+                    <option value="False" selected>Tous les partenaires</option>
+                    {% for part in partenaire %}
+                      <option value="{{part.id}}">{{part.nom}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="input-group mt-2 col">
+                  <select class="custom-select" id="type" aria-label="Example select with button addon">
+                    <option value="False" selected>Tous les types</option>
+                    {% for typ in type %}
+                      <option value="{{typ.id}}">{{typ.nom}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="input-group mt-2 col">
+                  <select class="custom-select" id="etat" aria-label="Example select with button addon">
+                    <option value="False" selected>Tous les états</option>
+                    {% for etat in etat %}
+                      <option value="{{etat.id}}">{{etat.nom}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+          </div>
+          
+          <div class="row mt-3">
+            <div class="col">
+              <h5>Date de création :</h5>
+              <div class="form-group mt-2">
+                  <label>Début</label>
+                  <input type="month" name="dateDebutCreation" id="dateDebutCreation" class="form-control col">
+              </div>
+              <div class="form-group mt-2">
+                  <label>Fin</label>
+                  <input type="month" name="dateFinCreation" id="dateFinCreation" class="form-control col">
+              </div>
+            </div>
+            <div class="col">
+              <h5>Date de cloture :</h5>
+              <div class="form-group mt-2">
+                  <label>Début</label>
+                  <input type="month" name="dateDebutCloture" id="dateDebutCloture" class="form-control col">
+              </div>
+              <div class="form-group mt-2">
+                  <label>Fin</label>
+                  <input type="month" name="dateFinCloture" id="dateFinCloture" class="form-control col">
+              </div>
+            </div>
+          </div>
+                
+          <table class="table table-striped table-bordered mt-5">
+              <thead><br>
+                <tr>
+                  <th scope="col">Client</th>
+                  <th scope="col">Partenaire</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Marge</th>
+                  <th scope="col">Récurrent</th>
+                  <th scope="col">Etat</th>
+                  <th scope="col">Facture</th>
+                  <th scope="col">Date de création</th>
+                  <th scope="col">Date de cloture</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% if not info %}
+                <tr><td colspan='8'>Aucune donnée<td></tr>            
+              {% else %}
+                {% for e in info %}
+                    <tr>
+                    {% for cli in client %}
+                        {% if cli.id == e.cli_id %}
+                            <td class="client_td">{{cli.nom}}</td>
+                        {% endif %}
+                    {% endfor %}
+                    {% for part in partenaire %}
+                        {% if part.id == e.partenaire_id %}
+                            <td class="partenaire_td">{{part.nom}}</td>
+                        {% endif %}
+                    {% endfor %}
+                    {% for typ in type %}
+                        {% if typ.id == e.typ_id %}
+                            <td class="type_td">{{typ.nom}}</td>
+                        {% endif %}
+                    {% endfor %}
+                        <td>{{ e.marge }}</td>
+                        <td>{{ e.recurrent }}</td>
+                    {% for etat in etat %}
+                        {% if etat.id == e.etat_id %}
+                            <td class="etat_td">{{etat.nom}}</td>
+                        {% endif %}
+                    {% endfor %}
+                        <td>{% if e.facture %}Oui{% else %}Non{% endif %}</td>
+                        <td><script>
+                          d = new Date("{{e.dateCreation}}")
+                          ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
+                          mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
+                          document.write(`${mo} ${ye}`);
+                        </script></td>
+                        <td><script>
+                          d = new Date("{{e.dateCloture}}")
+                          ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
+                          mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
+                          if(`${mo} ${ye}` == "janv. 1970"){
+                            document.write("Pas encore cloturé");
+                          } else {
+                            document.write(`${mo} ${ye}`);
+                          }
+                        </script></td>
+                    </tr>
+                {% endfor %}
+              {% endif %}
+              </tbody>
+            </table>
+      </div>
     </main>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script>
-      $('#type, #client, #partenaire, #etat, #dateDebutCreation, #dateFinCreation, #dateDebutCloture, #dateFinCloture').change(function(){
-        type=$("#type").val()
-        client=$("#client").val()
-        partenaire=$("#partenaire").val()
-        etat=$("#etat").val()
-        dcreation=$('#dateDebutCreation').val()
-        fcreation=$('#dateFinCreation').val()
-        dcloture=$('#dateDebutCloture').val()
-        fcloture=$('#dateFinCloture').val()
-        $.ajax({
-          url : '/filter/',
-          type : 'POST',
-          data: {
-            csrfmiddlewaretoken: "{{ csrf_token }}",
-            client : client,
-            type: type,
-            partenaire: partenaire,
-            etat: etat,
-            dcreation: dcreation,
-            fcreation: fcreation,
-            dcloture: dcloture,
-            fcloture: fcloture
-          },
-          success : function(json, statut){
-            var json = JSON.parse(JSON.stringify(json))
-            $("#list option[value='2']").text()
-            $('table').html('<thead><tr><th scope="col">Client</th><th scope="col">Partenaire</th><th scope="col">Type</th><th scope="col">Marge</th><th scope="col">Récurrent</th><th scope="col">Etat</th><th scope="col">Facture</th><th scope="col">DateCreation</th><th scope="col">DateCloture</th></tr> </thead><tbody></tbody>')
-            $('.marge-total').text("0 €")
-            $('.recurrent-total').text("0 €")
-            if(json.length==0){
-              $('tbody').append("<tr><td colspan='8'>Aucune donnée<td></tr>")
-            }
-            for (var i=0;i<json.length;++i){
-                ye1 = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(new Date(json[i].fields.dateCreation))
-                mo1 = new Intl.DateTimeFormat('fr', { month: 'short' }).format(new Date(json[i].fields.dateCreation))
-                ye2 = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(new Date(json[i].fields.dateCloture))
-                mo2 = new Intl.DateTimeFormat('fr', { month: 'short' }).format(new Date(json[i].fields.dateCloture))
-                if(json[i].fields.facture == false){
-                  facture = "Non"
-                } else {
-                  facture = "Oui"
-                }
-                if(ye2 != '1970'){
-                  $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>'+`${mo2} ${ye2}`+'</td> </tr>');
-                } else {
-                  $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>Pas encore cloturé</td> </tr>');
-                }
-                $('.marge-total').text((parseInt($('.marge-total').text())+json[i].fields.marge)+" €")
-                $('.recurrent-total').text((parseInt($('.recurrent-total').text())+json[i].fields.recurrent)+" €")
-            }
 
-          },
-          error : function(resultat, statut, erreur){
-          }
-        });
-
-      })
-    </script>
+    <div class="container">
+      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+      <script>
+        $('#type, #client, #partenaire, #etat, #dateDebutCreation, #dateFinCreation, #dateDebutCloture, #dateFinCloture').change(function(){
+          type=$("#type").val()
+          client=$("#client").val()
+          partenaire=$("#partenaire").val()
+          etat=$("#etat").val()
+          dcreation=$('#dateDebutCreation').val()
+          fcreation=$('#dateFinCreation').val()
+          dcloture=$('#dateDebutCloture').val()
+          fcloture=$('#dateFinCloture').val()
+          $.ajax({
+            url : '/filter/',
+            type : 'POST',
+            data: {
+              csrfmiddlewaretoken: "{{ csrf_token }}",
+              client : client,
+              type: type,
+              partenaire: partenaire,
+              etat: etat,
+              dcreation: dcreation,
+              fcreation: fcreation,
+              dcloture: dcloture,
+              fcloture: fcloture
+            },
+            success : function(json, statut){
+              var json = JSON.parse(JSON.stringify(json))
+              $("#list option[value='2']").text()
+              $('table').html('<thead><tr><th scope="col">Client</th><th scope="col">Partenaire</th><th scope="col">Type</th><th scope="col">Marge</th><th scope="col">Récurrent</th><th scope="col">Etat</th><th scope="col">Facture</th><th scope="col">DateCreation</th><th scope="col">DateCloture</th></tr> </thead><tbody></tbody>')
+              $('.marge-total').text("0 €")
+              $('.recurrent-total').text("0 €")
+              if(json.length==0){
+                $('tbody').append("<tr><td colspan='8'>Aucune donnée<td></tr>")
+              }
+              for (var i=0;i<json.length;++i){
+                  ye1 = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(new Date(json[i].fields.dateCreation))
+                  mo1 = new Intl.DateTimeFormat('fr', { month: 'short' }).format(new Date(json[i].fields.dateCreation))
+                  ye2 = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(new Date(json[i].fields.dateCloture))
+                  mo2 = new Intl.DateTimeFormat('fr', { month: 'short' }).format(new Date(json[i].fields.dateCloture))
+                  if(json[i].fields.facture == false){
+                    facture = "Non"
+                  } else {
+                    facture = "Oui"
+                  }
+                  if(ye2 != '1970'){
+                    $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>'+`${mo2} ${ye2}`+'</td> </tr>');
+                  } else {
+                    $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>Pas encore cloturé</td> </tr>');
+                  }
+                  $('.marge-total').text((parseInt($('.marge-total').text())+json[i].fields.marge)+" €")
+                  $('.recurrent-total').text((parseInt($('.recurrent-total').text())+json[i].fields.recurrent)+" €")
+              }
+  
+            },
+            error : function(resultat, statut, erreur){
+            }
+          });
+  
+        })
+      </script>
+    </div>
+    
     <!-- Footer -->
     {% include 'layouts/footer.html' %}
