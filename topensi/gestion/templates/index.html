@@ -19,40 +19,40 @@
         <div class="row">
             <div class="input-group mt-5 col">
                 <select class="custom-select" id="client" aria-label="Selectionnez le client">
-                  <option selected>Tous les clients</option>
+                  <option value="False" selected>Tous les clients</option>
                   {% for cli in client %}
-                    <option value="{{cli.nom}}">{{cli.nom}}</option>
+                    <option value="{{cli.id}}">{{cli.nom}}</option>
                   {% endfor %}
                 </select>
               </div>
               <div class="input-group mt-5 col">
                 <select class="custom-select" id="partenaire" aria-label="Selectionnez le partenaire">
-                  <option selected>Tous les partenaires</option>
+                  <option value="False" selected>Tous les partenaires</option>
                   {% for part in partenaire %}
-                    <option value="{{part.nom}}">{{part.nom}}</option>
+                    <option value="{{part.id}}">{{part.nom}}</option>
                   {% endfor %}
                 </select>
               </div>
               <div class="input-group mt-5 col">
                 <select class="custom-select" id="type" aria-label="Example select with button addon">
-                  <option selected>Tous les types</option>
+                  <option value="False" selected>Tous les types</option>
                   {% for typ in type %}
-                    <option value="{{typ.nom}}">{{typ.nom}}</option>
+                    <option value="{{typ.id}}">{{typ.nom}}</option>
                   {% endfor %}
                 </select>
               </div>
               <div class="input-group mt-5 col">
                 <select class="custom-select" id="etat" aria-label="Example select with button addon">
-                  <option selected>Tous les états</option>
+                  <option value="False" selected>Tous les états</option>
                   {% for etat in etat %}
-                    <option value="{{etat.nom}}">{{etat.nom}}</option>
+                    <option value="{{etat.id}}">{{etat.nom}}</option>
                   {% endfor %}
                 </select>
               </div>
         </div>
         
 
-        <table class="table table-bordered mt-5">
+        <table class="table table-striped table-bordered mt-5">
             <thead><br>
               <tr>
                 <th scope="col">Client</th>
@@ -99,6 +99,36 @@
             </tbody>
           </table>
     </main>
-
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>
+      $('#type, #client, #partenaire, #etat').change(function(){
+        type=$("#type").val()
+        client=$("#client").val()
+        partenaire=$("#partenaire").val()
+        etat=$("#etat").val()
+        $.ajax({
+          url : '/filter/',
+          type : 'POST',
+          data: {
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+            client : client,
+            type: type,
+            partenaire: partenaire,
+            etat: etat,
+          },
+          success : function(json, statut){
+            var json = JSON.parse(JSON.stringify(json))
+            console.log($("#client option[value='1']").text())
+            $("#list option[value='2']").text()
+            $('table').html('<thead><tr><th scope="col">Client</th><th scope="col">Partenaire</th><th scope="col">Type</th><th scope="col">Marge</th><th scope="col">Récurrent</th><th scope="col">Etat</th><th scope="col">Facture</th><th scope="col">DateCreation</th><th scope="col">DateCloture</th></tr> </thead><tbody></tbody>')
+            for (var i=0;i<json.length;++i){
+                $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].cli_id+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].partenaire_id+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].typ_id+"']").text()+'</td> <td>'+json[i].marge+'</td> <td>'+json[i].recurrent+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].etat_id+"']").text()+'</td> <td>'+json[i].facture+'</td> <td>'+json[i].dateCreation+'</td> <td>'+json[i].dateCloture+'</td> </tr>');
+            }
+          },
+          error : function(resultat, statut, erreur){
+          }
+        });
+      })
+    </script>
     <!-- Footer -->
     {% include 'layouts/footer.html' %}

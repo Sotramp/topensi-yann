@@ -12,6 +12,7 @@ from gestion.models import Client
 from gestion.models import Partenaire
 from gestion.models import Type
 import ipaddress
+from django.http import JsonResponse
 
 # Create your views here.
 class IndexView(TemplateView):
@@ -121,3 +122,23 @@ class AjouterInfoView(TemplateView):
     except:
       messages.error(request, "Impossible d'ajouter l'info")
       return HttpResponseRedirect( "/add/" )
+
+class FilterInfoView(TemplateView):
+  template_name = "index.html"
+  def post(self, request, **kwargs):
+    etat = request.POST.get('etat', False)
+    partenaire = request.POST.get('partenaire', False)
+    type = request.POST.get('type', False)
+    client = request.POST.get('client', False)
+    to_send = Info.objects.all()
+    if etat != 'False':
+      to_send = to_send.filter(etat_id=etat)
+    if partenaire != 'False':
+      to_send = to_send.filter(partenaire_id=partenaire)
+    if type != 'False':
+      to_send = to_send.filter(typ_id=type)
+    if client != 'False':
+      to_send = to_send.filter(cli_id=client)
+    print(list(to_send.values()))
+    return JsonResponse(list(to_send.values()), safe=False)
+
