@@ -15,7 +15,7 @@ import ipaddress
 from django.http import JsonResponse
 import month
 from django.core import serializers
-
+import datetime
 # Create your views here.
 class IndexView(TemplateView):
   template_name = 'index.html'
@@ -255,3 +255,37 @@ class UpdateRecurrent(TemplateView):
     #except:
       #messages.error(request, "Impossible de mettre a jour l'info")
       #return HttpResponseRedirect( "/update/" )
+
+class FilterRecurrentView(TemplateView):
+  template_name = "index.html"
+  def post(self, request, **kwargs):
+    dinstall = request.POST.get('dinstall', False)
+    finstall = request.POST.get('finstall', False)
+    dcloture = request.POST.get('dcloture', False)
+    fcloture = request.POST.get('fcloture', False)
+    to_send = Info.objects.all()
+    exclude = []
+    if finstall != '':
+      for e in to_send:
+        if e.dateInstallation == None or e.dateInstallation > datetime.datetime.strptime(finstall, '%Y-%m-%d').date():
+          exclude.append(e.id)
+    if dinstall != '':
+      for e in to_send:
+        if e.dateInstallation == None or e.dateInstallation < datetime.datetime.strptime(dinstall, '%Y-%m-%d').date():
+          exclude.append(e.id)
+    if fcloture != '':
+      for e in to_send:
+        if e.dateCloture > fcloture:
+          exclude.append(e.id)
+        elif e.dateCloture == '1970-01':
+          exclude.append(e.id)
+    if dcloture != '':
+      for e in to_send:
+        if e.dateCloture < dcloture:
+          exclude.append(e.id)
+        elif e.dateCloture == '1970-01':
+          exclude.append(e.id)
+    to_send = to_send.exclude(id__in=exclude)
+    leads_as_json = serializers.serialize('json', to_send)
+    print(leads_as_json)
+    return HttpResponse(leads_as_json, content_type='json')
