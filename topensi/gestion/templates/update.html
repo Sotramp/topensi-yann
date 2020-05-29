@@ -121,14 +121,14 @@
             } else if(x == 7){
                 d = new Date($(this).text())
                 ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
-                mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(d)
-                da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(d)
+                mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
+                da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
                 $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='datecreation' value ='"+`${ye}-${mo}-${da}`+"'/>")    
             } else if(x == 8){
                 d = new Date($(this).text())
                 ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
-                mo = new Intl.DateTimeFormat('en', { month: 'numeric' }).format(d)
-                da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(d)
+                mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
+                da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
                 $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='datecloture' value ='"+`${ye}-${mo}-${da}`+"'/>")    
             } else if(x == 9){
                 idform = id.replace("form-maj","")
