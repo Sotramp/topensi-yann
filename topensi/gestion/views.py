@@ -201,6 +201,8 @@ class UpdateInfo(TemplateView):
     partenairenom = request.POST.get('partenaire', False)
     typenom = request.POST.get('type', False)
     etatnom = request.POST.get('etat', False)
+    if(dateCloture == ''):
+      dateCloture = '1970-01'
     clientid = Client.objects.get(nom=clientnom).id
     partenaireid = Partenaire.objects.get(nom=partenairenom).id
     typeid = Type.objects.get(nom=typenom).id

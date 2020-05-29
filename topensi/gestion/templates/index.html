@@ -36,8 +36,13 @@
             </script> €</p>
         </div>
       </div>
+      <div class="row">
+        <div class="mt-5 col input-group">
+          <h4>Filtres</h4>
+        </div>
+      </div>
         <div class="row">
-            <div class="input-group mt-5 col">
+            <div class="input-group mt-2 col">
                 <select class="custom-select" id="client" aria-label="Selectionnez le client">
                   <option value="False" selected>Tous les clients</option>
                   {% for cli in client %}
@@ -45,7 +50,7 @@
                   {% endfor %}
                 </select>
               </div>
-              <div class="input-group mt-5 col">
+              <div class="input-group mt-2 col">
                 <select class="custom-select" id="partenaire" aria-label="Selectionnez le partenaire">
                   <option value="False" selected>Tous les partenaires</option>
                   {% for part in partenaire %}
@@ -53,7 +58,7 @@
                   {% endfor %}
                 </select>
               </div>
-              <div class="input-group mt-5 col">
+              <div class="input-group mt-2 col">
                 <select class="custom-select" id="type" aria-label="Example select with button addon">
                   <option value="False" selected>Tous les types</option>
                   {% for typ in type %}
@@ -61,7 +66,7 @@
                   {% endfor %}
                 </select>
               </div>
-              <div class="input-group mt-5 col">
+              <div class="input-group mt-2 col">
                 <select class="custom-select" id="etat" aria-label="Example select with button addon">
                   <option value="False" selected>Tous les états</option>
                   {% for etat in etat %}
@@ -73,20 +78,24 @@
         
         <div class="row mt-3">
           <div class="col">
-            <label>Date de création :</label>
-            <div class="input-group mt-2">
+            <h5>Date de création :</h5>
+            <div class="form-group mt-2">
+                <label>Début</label>
                 <input type="month" name="dateDebutCreation" id="dateDebutCreation" class="form-control col">
             </div>
-            <div class="input-group mt-2">
+            <div class="form-group mt-2">
+                <label>Fin</label>
                 <input type="month" name="dateFinCreation" id="dateFinCreation" class="form-control col">
             </div>
           </div>
           <div class="col">
-            <label>Date de cloture :</label>
-            <div class="input-group mt-2">
+            <h5>Date de cloture :</h5>
+            <div class="form-group mt-2">
+                <label>Début</label>
                 <input type="month" name="dateDebutCloture" id="dateDebutCloture" class="form-control col">
             </div>
-            <div class="input-group mt-2">
+            <div class="form-group mt-2">
+                <label>Fin</label>
                 <input type="month" name="dateFinCloture" id="dateFinCloture" class="form-control col">
             </div>
           </div>

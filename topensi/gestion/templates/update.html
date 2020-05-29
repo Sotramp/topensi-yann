@@ -60,13 +60,27 @@
                         <td class="etat_td">{{etat.nom}}</td>
                     {% endif %}
                 {% endfor %}
-                    <td>{{ e.facture }}</td>
-                    <td>{{ e.dateCreation }}</td>
-                    <td>{{ e.dateCloture }}</td>
+                    <td>{% if e.facture %}Oui{% else %}Non{% endif %}</td>
+                    <td><script>
+                        d = new Date("{{e.dateCreation}}")
+                        ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
+                        mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
+                        document.write(`${mo} ${ye}`);
+                      </script></td>
+                    <td><script>
+                        d = new Date("{{e.dateCloture}}")
+                        ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
+                        mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
+                        if(`${mo} ${ye}` == "janv. 1970"){
+                          document.write("Pas encore cloturé");
+                        } else {
+                          document.write(`${mo} ${ye}`);
+                        }
+                      </script></td>
                     <td>
                         <div class="row">
                             <div class="col text-center">
-                                <button type="submit" form="form-maj{{e.id}}" class="btn btn-secondary modifier">Modifier</button>
+                                <button type="button" form="form-maj{{e.id}}" class="btn btn-secondary modifier">Modifier</button>
                             </div>
                         </div>
                     </td></form>
@@ -86,6 +100,7 @@
     $(".modifier").click(function() {
         id = $(this).attr('form')
         $(this).parent().parent().parent().parent().eq(0).find("td").each(function(x,cpt){
+            console.log(x)
             if(x == 0){
                 before = $(this).text()
                 $(this).html('<select style="width : 100%;" class="custom-select"  form="'+id+'" name="client"><option>Selectionnez le client</option>{% for e in client %}<option>{{e.nom}}</option>{% endfor %}</select>')
@@ -124,7 +139,8 @@
                 })
             } else if(x == 6){
                 before = $(this).text()
-                $(this).html('<select style="width : 100%;"class="custom-select"  form="'+id+'" name="facture"><option>Selectionnez facture</option>{% for e in info %}<option>{{e.facture}}</option>{% endfor %}</select>')
+
+                $(this).html('<select style="width : 100%;"class="custom-select"  form="'+id+'" name="facture"><option>Selectionnez facture</option><option value="True">Facturé</option><option value="False">Non facturé</option></select>')
                 $(this).find("option").each(function(){
                     if($(this).text() == before){
                         $(this).prop("selected", "selected")
@@ -134,14 +150,17 @@
                 d = new Date($(this).text())
                 ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
                 mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
-                da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
                 $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecreation' value ='"+`${ye}-${mo}`+"'/>")    
             } else if(x == 8){
-                d = new Date($(this).text())
-                ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
-                mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
-                da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
-                $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecloture' value ='"+`${ye}-${mo}`+"'/>")    
+                console.log($(this).text())
+                if($(this).text() != 'Pas encore cloturé'){ 
+                    d = new Date($(this).text())
+                    ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+                    mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
+                    $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecloture' value ='"+`${ye}-${mo}`+"'/>")
+                } else {
+                    $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecloture' />")
+                }
             } else if(x == 9){
                 idform = id.replace("form-maj","")
                 $(this).html('<input type="hidden" form="'+id+'" name="formid" value="'+idform+'" /> <button type="submit" form="'+id+'" class="btn btn-success mt-2 my-sm-0">Valider</button>')
