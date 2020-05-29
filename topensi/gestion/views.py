@@ -122,6 +122,7 @@ class AjouterInfoView(TemplateView):
       messages.error(request, "Veuillez remplir tous les champs!")
       return HttpResponseRedirect( "/add/" )
     marge = request.POST.get('marge', False)
+    print(marge)
     recurrent = request.POST.get('recurrent', False)
     facture = request.POST.get('facture', False)
     dateCreation = request.POST.get('dateCreation', False)
@@ -144,8 +145,30 @@ class FilterInfoView(TemplateView):
     etat = request.POST.get('etat', False)
     partenaire = request.POST.get('partenaire', False)
     type = request.POST.get('type', False)
+    dcreation = request.POST.get('dcreation', False)
+    fcreation = request.POST.get('fcreation', False)
+    dcloture = request.POST.get('dcloture', False)
+    fcloture = request.POST.get('fcloture', False)
     client = request.POST.get('client', False)
     to_send = Info.objects.all()
+    exclude = []
+    if fcreation != '':
+      for e in to_send:
+        if e.dateCreation > fcreation:
+          exclude.append(e.id)
+    if dcreation != '':
+      for e in to_send:
+        if e.dateCreation < dcreation:
+          exclude.append(e.id)
+    if fcloture != '':
+      for e in to_send:
+        if e.dateCloture > fcloture:
+          exclude.append(e.id)
+    if dcloture != '':
+      for e in to_send:
+        if e.dateCloture < dcloture:
+          exclude.append(e.id)
+    to_send = to_send.exclude(id__in=exclude)
     if etat != 'False':
       to_send = to_send.filter(etat_id=etat)
     if partenaire != 'False':

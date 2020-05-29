@@ -75,19 +75,19 @@
           <div class="col">
             <label>Date de création :</label>
             <div class="input-group mt-2">
-                <input type="month" name="dateDebutCreation" class="form-control col">
+                <input type="month" name="dateDebutCreation" id="dateDebutCreation" class="form-control col">
             </div>
             <div class="input-group mt-2">
-                <input type="month" name="dateFinCreation" class="form-control col">
+                <input type="month" name="dateFinCreation" id="dateFinCreation" class="form-control col">
             </div>
           </div>
           <div class="col">
             <label>Date de cloture :</label>
             <div class="input-group mt-2">
-                <input type="month" name="dateDebutCloture"  class="form-control col">
+                <input type="month" name="dateDebutCloture" id="dateDebutCloture" class="form-control col">
             </div>
             <div class="input-group mt-2">
-                <input type="month" name="dateFinCloture" class="form-control col">
+                <input type="month" name="dateFinCloture" id="dateFinCloture" class="form-control col">
             </div>
           </div>
         </div>
@@ -159,11 +159,15 @@
     </main>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script>
-      $('#type, #client, #partenaire, #etat').change(function(){
+      $('#type, #client, #partenaire, #etat, #dateDebutCreation, #dateFinCreation, #dateDebutCloture, #dateFinCloture').change(function(){
         type=$("#type").val()
         client=$("#client").val()
         partenaire=$("#partenaire").val()
         etat=$("#etat").val()
+        dcreation=$('#dateDebutCreation').val()
+        fcreation=$('#dateFinCreation').val()
+        dcloture=$('#dateDebutCloture').val()
+        fcloture=$('#dateFinCloture').val()
         $.ajax({
           url : '/filter/',
           type : 'POST',
@@ -173,6 +177,10 @@
             type: type,
             partenaire: partenaire,
             etat: etat,
+            dcreation: dcreation,
+            fcreation: fcreation,
+            dcloture: dcloture,
+            fcloture: fcloture
           },
           success : function(json, statut){
             var json = JSON.parse(JSON.stringify(json))
