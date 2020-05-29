@@ -97,20 +97,27 @@ class AjouterInfoView(TemplateView):
   template_name = "index.html"
   def post(self, request, **kwargs):
     client = request.POST.get('client', False)
-    client_id = Client.objects.get(nom=client)
     partenaire = request.POST.get('partenaire', False) 
-    partenaire_id = Partenaire.objects.get(nom=partenaire)
     type = request.POST.get('type', False)
-    type_id = Type.objects.get(nom=type)
     etat = request.POST.get('etat', False)
-    print(etat)
-    etat_id = Etat.objects.get(nom=etat)
+    try:
+      type_id = Type.objects.get(nom=type)
+      etat_id = Etat.objects.get(nom=etat)
+      partenaire_id = Partenaire.objects.get(nom=partenaire)
+      client_id = Client.objects.get(nom=client)
+    except:
+      messages.error(request, "Veuillez remplir tous les champs!")
+      return HttpResponseRedirect( "/add/" )
     marge = request.POST.get('marge', False)
     recurrent = request.POST.get('recurrent', False)
     facture = request.POST.get('facture', False)
     dateCreation = request.POST.get('dateCreation', False)
     dateCloture = request.POST.get('dateCloture', False)
-    i = Info(cli=client_id, partenaire=partenaire_id, typ=type_id, etat=etat_id,marge=marge, recurrent=recurrent, facture=facture, dateCloture = dateCloture, dateCreation = dateCreation)
-    i.save()
-    messages.success(request, "L'info a bien été ajoutée")
-    return HttpResponseRedirect( "/add/" )
+    try:
+      i = Info(cli=client_id, partenaire=partenaire_id, typ=type_id, etat=etat_id,marge=marge, recurrent=recurrent, facture=facture, dateCloture = dateCloture, dateCreation = dateCreation)
+      i.save()
+      messages.success(request, "L'info a bien été ajoutée")
+      return HttpResponseRedirect( "/add/" )
+    except:
+      messages.error(request, "Impossible d'ajouter l'info")
+      return HttpResponseRedirect( "/add/" )
