@@ -97,7 +97,7 @@
                         if(x == 5){
                             if($(this).text() != "None" && $(this).text() !=""){
                                 d = new Date($(this).text())
-                                da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(d)
+                                da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
                                 ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
                                 mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
                                 $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='dateinstallation' value ='"+`${ye}-${mo}-${da}`+"'/>")   
