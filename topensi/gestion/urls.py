@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^add/ajouter_etat/$', AjouterEtatView.as_view()),
     url(r'^add/ajouter_info/$', AjouterInfoView.as_view()),
     url(r'^filter/$', FilterInfoView.as_view()),
+    url(r'^filter/recurrent/$', FilterRecurrentView.as_view()),
     url(r'^update/delete/$', DeleteInfo.as_view()),
     url(r'^update/maj/$', UpdateInfo.as_view()),
     url(r'^recurrent/maj/$', UpdateRecurrent.as_view()),
