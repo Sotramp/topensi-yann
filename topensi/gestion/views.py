@@ -123,7 +123,6 @@ class AjouterInfoView(TemplateView):
       messages.error(request, "Impossible d'ajouter l'info")
       return HttpResponseRedirect( "/add/" )
 
-<<<<<<< HEAD
 class FilterInfoView(TemplateView):
   template_name = "index.html"
   def post(self, request, **kwargs):
@@ -143,7 +142,6 @@ class FilterInfoView(TemplateView):
     print(list(to_send.values()))
     return JsonResponse(list(to_send.values()), safe=False)
 
-=======
 class DeleteInfo(TemplateView):
   template_name = 'update.html'
   def post(self, request, **kwargs):
@@ -179,4 +177,3 @@ class UpdateInfo(TemplateView):
     #except:
       #messages.error(request, "Impossible de mettre a jour l'info")
       #return HttpResponseRedirect( "/update/" )
->>>>>>> 606e83128a814ba99e0ef479a7774875062c5c84
