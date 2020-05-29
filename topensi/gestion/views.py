@@ -189,3 +189,20 @@ class UpdateInfo(TemplateView):
     #except:
       #messages.error(request, "Impossible de mettre a jour l'info")
       #return HttpResponseRedirect( "/update/" )
+
+class UpdateRecurrent(TemplateView):
+  template_name = 'recurrent.html'
+  def post(self, request, **kwargs):
+    dateInstallation = request.POST.get('dateinstallation', False)
+    #except:
+    #messages.error(request, 'Mauvaise saisie')
+    #return HttpResponseRedirect( "/update/" )
+    formid = request.POST.get('formid', False)
+    print(dateInstallation)
+    #try:
+    Info.objects.filter(id=formid).update(dateInstallation=dateInstallation) 
+    messages.success(request, "L'info a bien été modifiée")
+    return HttpResponseRedirect( "/recurrent/" )
+    #except:
+      #messages.error(request, "Impossible de mettre a jour l'info")
+      #return HttpResponseRedirect( "/update/" )

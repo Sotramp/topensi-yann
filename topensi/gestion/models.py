@@ -24,6 +24,7 @@ class Info(models.Model):
     facture = models.BooleanField()
     dateCreation = MonthField()
     dateCloture = MonthField()
+    dateInstallation = models.DateField(null=True)
     
     def __unicode__(self):
         return unicode(self.month)
