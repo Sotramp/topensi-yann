@@ -100,7 +100,6 @@ class AjouterEtatView(TemplateView):
   template_name = "index.html"
   def post(self, request, **kwargs):
     type = request.POST.get('etat', False)
-    print(type)
     c = Etat(nom=type)
     c.save()
     messages.success(request, 'Le etat a bien été ajouté')
@@ -126,14 +125,16 @@ class AjouterInfoView(TemplateView):
     facture = request.POST.get('facture', False)
     dateCreation = request.POST.get('dateCreation', False)
     dateCloture = request.POST.get('dateCloture', False)
-    try:
-      i = Info(cli=client_id, partenaire=partenaire_id, typ=type_id, etat=etat_id,marge=marge, recurrent=recurrent, facture=facture, dateCloture = dateCloture, dateCreation = dateCreation)
-      i.save()
-      messages.success(request, "L'info a bien été ajoutée")
-      return HttpResponseRedirect( "/add/" )
-    except:
-      messages.error(request, "Impossible d'ajouter l'info")
-      return HttpResponseRedirect( "/add/" )
+    #try:
+    if(dateCloture == ''):
+      dateCloture = "1970-01"
+    i = Info(cli=client_id, partenaire=partenaire_id, typ=type_id, etat=etat_id,marge=marge, recurrent=recurrent, facture=facture, dateCloture = dateCloture, dateCreation = dateCreation)
+    i.save()
+    messages.success(request, "L'info a bien été ajoutée")
+    return HttpResponseRedirect( "/add/" )
+    #except:
+    #  messages.error(request, "Impossible d'ajouter l'info")
+    #  return HttpResponseRedirect( "/add/" )
 
 class FilterInfoView(TemplateView):
   template_name = "index.html"
@@ -141,8 +142,34 @@ class FilterInfoView(TemplateView):
     etat = request.POST.get('etat', False)
     partenaire = request.POST.get('partenaire', False)
     type = request.POST.get('type', False)
+    dcreation = request.POST.get('dcreation', False)
+    fcreation = request.POST.get('fcreation', False)
+    dcloture = request.POST.get('dcloture', False)
+    fcloture = request.POST.get('fcloture', False)
     client = request.POST.get('client', False)
     to_send = Info.objects.all()
+    exclude = []
+    if fcreation != '':
+      for e in to_send:
+        if e.dateCreation > fcreation:
+          exclude.append(e.id)
+    if dcreation != '':
+      for e in to_send:
+        if e.dateCreation < dcreation:
+          exclude.append(e.id)
+    if fcloture != '':
+      for e in to_send:
+        if e.dateCloture > fcloture:
+          exclude.append(e.id)
+        elif e.dateCloture == '1970-01':
+          exclude.append(e.id)
+    if dcloture != '':
+      for e in to_send:
+        if e.dateCloture < dcloture:
+          exclude.append(e.id)
+        elif e.dateCloture == '1970-01':
+          exclude.append(e.id)
+    to_send = to_send.exclude(id__in=exclude)
     if etat != 'False':
       to_send = to_send.filter(etat_id=etat)
     if partenaire != 'False':

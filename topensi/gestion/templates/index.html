@@ -75,19 +75,19 @@
           <div class="col">
             <label>Date de création :</label>
             <div class="input-group mt-2">
-                <input type="date" name="dateDebutCreation" class="form-control col">
+                <input type="month" name="dateDebutCreation" id="dateDebutCreation" class="form-control col">
             </div>
             <div class="input-group mt-2">
-                <input type="date" name="dateFinCreation" class="form-control col">
+                <input type="month" name="dateFinCreation" id="dateFinCreation" class="form-control col">
             </div>
           </div>
           <div class="col">
             <label>Date de cloture :</label>
             <div class="input-group mt-2">
-                <input type="date" name="dateDebutCloture"  class="form-control col">
+                <input type="month" name="dateDebutCloture" id="dateDebutCloture" class="form-control col">
             </div>
             <div class="input-group mt-2">
-                <input type="date" name="dateFinCloture" class="form-control col">
+                <input type="month" name="dateFinCloture" id="dateFinCloture" class="form-control col">
             </div>
           </div>
         </div>
@@ -102,60 +102,72 @@
                 <th scope="col">Récurrent</th>
                 <th scope="col">Etat</th>
                 <th scope="col">Facture</th>
-                <th scope="col">DateCreation</th>
-                <th scope="col">DateCloture</th>
+                <th scope="col">Date de création</th>
+                <th scope="col">Date de cloture</th>
               </tr>
             </thead>
             <tbody>
-            {% for e in info %}
-                <tr>
-                {% for cli in client %}
-                    {% if cli.id == e.cli_id %}
-                        <td class="client_td">{{cli.nom}}</td>
-                    {% endif %}
-                {% endfor %}
-                {% for part in partenaire %}
-                    {% if part.id == e.partenaire_id %}
-                        <td class="partenaire_td">{{part.nom}}</td>
-                    {% endif %}
-                {% endfor %}
-                {% for typ in type %}
-                    {% if typ.id == e.typ_id %}
-                        <td class="type_td">{{typ.nom}}</td>
-                    {% endif %}
-                {% endfor %}
-                    <td>{{ e.marge }}</td>
-                    <td>{{ e.recurrent }}</td>
-                {% for etat in etat %}
-                    {% if etat.id == e.etat_id %}
-                        <td class="etat_td">{{etat.nom}}</td>
-                    {% endif %}
-                {% endfor %}
-                    <td>{% if e.facture %}Oui{% else %}Non{% endif %}</td>
-                    <td><script>
-                      d = new Date("{{e.dateCreation}}")
-                      ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
-                      mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
-                      document.write(`${mo} ${ye}`);
-                    </script></td>
-                    <td><script>
-                      d = new Date("{{e.dateCloture}}")
-                      ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
-                      mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
-                      document.write(`${mo} ${ye}`);
-                    </script></td>
-                </tr>
-            {% endfor %}
+            {% if not info %}
+              <tr><td colspan='8'>Aucune donnée<td></tr>            
+            {% else %}
+              {% for e in info %}
+                  <tr>
+                  {% for cli in client %}
+                      {% if cli.id == e.cli_id %}
+                          <td class="client_td">{{cli.nom}}</td>
+                      {% endif %}
+                  {% endfor %}
+                  {% for part in partenaire %}
+                      {% if part.id == e.partenaire_id %}
+                          <td class="partenaire_td">{{part.nom}}</td>
+                      {% endif %}
+                  {% endfor %}
+                  {% for typ in type %}
+                      {% if typ.id == e.typ_id %}
+                          <td class="type_td">{{typ.nom}}</td>
+                      {% endif %}
+                  {% endfor %}
+                      <td>{{ e.marge }}</td>
+                      <td>{{ e.recurrent }}</td>
+                  {% for etat in etat %}
+                      {% if etat.id == e.etat_id %}
+                          <td class="etat_td">{{etat.nom}}</td>
+                      {% endif %}
+                  {% endfor %}
+                      <td>{% if e.facture %}Oui{% else %}Non{% endif %}</td>
+                      <td><script>
+                        d = new Date("{{e.dateCreation}}")
+                        ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
+                        mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
+                        document.write(`${mo} ${ye}`);
+                      </script></td>
+                      <td><script>
+                        d = new Date("{{e.dateCloture}}")
+                        ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
+                        mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
+                        if(`${mo} ${ye}` == "janv. 1970"){
+                          document.write("Pas encore cloturé");
+                        } else {
+                          document.write(`${mo} ${ye}`);
+                        }
+                      </script></td>
+                  </tr>
+              {% endfor %}
+            {% endif %}
             </tbody>
           </table>
     </main>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script>
-      $('#type, #client, #partenaire, #etat').change(function(){
+      $('#type, #client, #partenaire, #etat, #dateDebutCreation, #dateFinCreation, #dateDebutCloture, #dateFinCloture').change(function(){
         type=$("#type").val()
         client=$("#client").val()
         partenaire=$("#partenaire").val()
         etat=$("#etat").val()
+        dcreation=$('#dateDebutCreation').val()
+        fcreation=$('#dateFinCreation').val()
+        dcloture=$('#dateDebutCloture').val()
+        fcloture=$('#dateFinCloture').val()
         $.ajax({
           url : '/filter/',
           type : 'POST',
@@ -165,10 +177,13 @@
             type: type,
             partenaire: partenaire,
             etat: etat,
+            dcreation: dcreation,
+            fcreation: fcreation,
+            dcloture: dcloture,
+            fcloture: fcloture
           },
           success : function(json, statut){
             var json = JSON.parse(JSON.stringify(json))
-            console.log($("#client option[value='1']").text())
             $("#list option[value='2']").text()
             $('table').html('<thead><tr><th scope="col">Client</th><th scope="col">Partenaire</th><th scope="col">Type</th><th scope="col">Marge</th><th scope="col">Récurrent</th><th scope="col">Etat</th><th scope="col">Facture</th><th scope="col">DateCreation</th><th scope="col">DateCloture</th></tr> </thead><tbody></tbody>')
             $('.marge-total').text("0 €")
@@ -176,7 +191,6 @@
             if(json.length==0){
               $('tbody').append("<tr><td colspan='8'>Aucune donnée<td></tr>")
             }
-            console.log(json.length)
             for (var i=0;i<json.length;++i){
                 ye1 = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(new Date(json[i].fields.dateCreation))
                 mo1 = new Intl.DateTimeFormat('fr', { month: 'short' }).format(new Date(json[i].fields.dateCreation))
@@ -187,7 +201,11 @@
                 } else {
                   facture = "Oui"
                 }
-                $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>'+`${mo2} ${ye2}`+'</td> </tr>');
+                if(ye2 != '1970'){
+                  $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>'+`${mo2} ${ye2}`+'</td> </tr>');
+                } else {
+                  $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>Pas encore cloturé</td> </tr>');
+                }
                 $('.marge-total').text((parseInt($('.marge-total').text())+json[i].fields.marge)+" €")
                 $('.recurrent-total').text((parseInt($('.recurrent-total').text())+json[i].fields.recurrent)+" €")
             }

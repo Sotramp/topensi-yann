@@ -63,8 +63,20 @@
                     <td>{{ e.facture }}</td>
                     <td>{{ e.dateCreation }}</td>
                     <td>{{ e.dateCloture }}</td>
-                    <td><button type="submit" form="form-maj{{e.id}}" class="btn btn-secondary modifier">Modifier</button></td></form>
-                    <td><button type="submit" form="form-del{{e.id}}" class="btn btn-danger">Supprimer</button></td>
+                    <td>
+                        <div class="row">
+                            <div class="col text-center">
+                                <button type="submit" form="form-maj{{e.id}}" class="btn btn-secondary modifier">Modifier</button>
+                            </div>
+                        </div>
+                    </td></form>
+                    <td>
+                        <div class="row">
+                            <div class="col text-center">
+                                <button type="submit" form="form-del{{e.id}}" class="btn btn-danger">Supprimer</button>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -73,7 +85,7 @@
           <script>
     $(".modifier").click(function() {
         id = $(this).attr('form')
-        $(this).parent().parent().eq(0).find("td").each(function(x,cpt){
+        $(this).parent().parent().parent().parent().eq(0).find("td").each(function(x,cpt){
             if(x == 0){
                 before = $(this).text()
                 $(this).html('<select style="width : 100%;" class="custom-select"  form="'+id+'" name="client"><option>Selectionnez le client</option>{% for e in client %}<option>{{e.nom}}</option>{% endfor %}</select>')
@@ -123,13 +135,13 @@
                 ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
                 mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
                 da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
-                $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='datecreation' value ='"+`${ye}-${mo}-${da}`+"'/>")    
+                $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecreation' value ='"+`${ye}-${mo}`+"'/>")    
             } else if(x == 8){
                 d = new Date($(this).text())
                 ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
                 mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
                 da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
-                $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='datecloture' value ='"+`${ye}-${mo}-${da}`+"'/>")    
+                $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecloture' value ='"+`${ye}-${mo}`+"'/>")    
             } else if(x == 9){
                 idform = id.replace("form-maj","")
                 $(this).html('<input type="hidden" form="'+id+'" name="formid" value="'+idform+'" /> <button type="submit" form="'+id+'" class="btn btn-success mt-2 my-sm-0">Valider</button>')
