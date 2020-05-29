@@ -13,6 +13,8 @@ from gestion.models import Partenaire
 from gestion.models import Type
 import ipaddress
 from django.http import JsonResponse
+import month
+from django.core import serializers
 
 # Create your views here.
 class IndexView(TemplateView):
@@ -149,8 +151,8 @@ class FilterInfoView(TemplateView):
       to_send = to_send.filter(typ_id=type)
     if client != 'False':
       to_send = to_send.filter(cli_id=client)
-    print(list(to_send.values()))
-    return JsonResponse(list(to_send.values()), safe=False)
+    leads_as_json = serializers.serialize('json', to_send)
+    return HttpResponse(leads_as_json, content_type='json')
 
 class DeleteInfo(TemplateView):
   template_name = 'update.html'

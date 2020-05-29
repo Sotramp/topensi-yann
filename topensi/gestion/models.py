@@ -1,4 +1,6 @@
 from django.db import models
+from month.models import MonthField
+
 # Create your models here.
 class Client(models.Model):
     nom = models.CharField(max_length=50, unique=True)
@@ -20,5 +22,8 @@ class Info(models.Model):
     recurrent = models.FloatField()
     etat = models.ForeignKey(Etat, on_delete=models.CASCADE)
     facture = models.BooleanField()
-    dateCreation = models.DateField()
-    dateCloture = models.DateField()
+    dateCreation = MonthField()
+    dateCloture = MonthField()
+    
+    def __unicode__(self):
+        return unicode(self.month)
