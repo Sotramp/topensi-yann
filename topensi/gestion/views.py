@@ -100,7 +100,6 @@ class AjouterEtatView(TemplateView):
   template_name = "index.html"
   def post(self, request, **kwargs):
     type = request.POST.get('etat', False)
-    print(type)
     c = Etat(nom=type)
     c.save()
     messages.success(request, 'Le etat a bien été ajouté')
@@ -122,12 +121,10 @@ class AjouterInfoView(TemplateView):
       messages.error(request, "Veuillez remplir tous les champs!")
       return HttpResponseRedirect( "/add/" )
     marge = request.POST.get('marge', False)
-    print(marge)
     recurrent = request.POST.get('recurrent', False)
     facture = request.POST.get('facture', False)
     dateCreation = request.POST.get('dateCreation', False)
     dateCloture = request.POST.get('dateCloture', False)
-    print(dateCloture)
     #try:
     if(dateCloture == ''):
       dateCloture = "1970-01"
@@ -164,9 +161,13 @@ class FilterInfoView(TemplateView):
       for e in to_send:
         if e.dateCloture > fcloture:
           exclude.append(e.id)
+        elif e.dateCloture == '1970-01':
+          exclude.append(e.id)
     if dcloture != '':
       for e in to_send:
         if e.dateCloture < dcloture:
+          exclude.append(e.id)
+        elif e.dateCloture == '1970-01':
           exclude.append(e.id)
     to_send = to_send.exclude(id__in=exclude)
     if etat != 'False':

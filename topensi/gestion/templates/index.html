@@ -184,7 +184,6 @@
           },
           success : function(json, statut){
             var json = JSON.parse(JSON.stringify(json))
-            console.log($("#client option[value='1']").text())
             $("#list option[value='2']").text()
             $('table').html('<thead><tr><th scope="col">Client</th><th scope="col">Partenaire</th><th scope="col">Type</th><th scope="col">Marge</th><th scope="col">Récurrent</th><th scope="col">Etat</th><th scope="col">Facture</th><th scope="col">DateCreation</th><th scope="col">DateCloture</th></tr> </thead><tbody></tbody>')
             $('.marge-total').text("0 €")
@@ -192,7 +191,6 @@
             if(json.length==0){
               $('tbody').append("<tr><td colspan='8'>Aucune donnée<td></tr>")
             }
-            console.log(json.length)
             for (var i=0;i<json.length;++i){
                 ye1 = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(new Date(json[i].fields.dateCreation))
                 mo1 = new Intl.DateTimeFormat('fr', { month: 'short' }).format(new Date(json[i].fields.dateCreation))
@@ -203,7 +201,11 @@
                 } else {
                   facture = "Oui"
                 }
-                $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>'+`${mo2} ${ye2}`+'</td> </tr>');
+                if(ye2 != '1970'){
+                  $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>'+`${mo2} ${ye2}`+'</td> </tr>');
+                } else {
+                  $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>Pas encore cloturé</td> </tr>');
+                }
                 $('.marge-total').text((parseInt($('.marge-total').text())+json[i].fields.marge)+" €")
                 $('.recurrent-total').text((parseInt($('.recurrent-total').text())+json[i].fields.recurrent)+" €")
             }
