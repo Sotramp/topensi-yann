@@ -5,7 +5,6 @@
 <html>
 <head>  
     <meta charset="UTF-8">
-    <title>Topensi - {% block title %}Accueil{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
 </head>
@@ -15,8 +14,111 @@
     {% include 'layouts/header.html' %}
 
     <!-- Contenu -->
-    <main role="main" class="container mt-5">
+    <main role="main" class="container">
+        <div class="card position-fixed" style="width: 10rem; right:0px;">
+          <div class="card-body">
+            <h5 class="card-title">Total</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Récurrent</h6>
+            <p class="card-text recurrent-total"><script>
+              document.write({% for e in info %}
+              +{{e.recurrent}}
+              {% endfor %}
+              );
+              </script> €</p>
+          </div>
+        </div>
+    
+          <div class="row mt-3">
+            <div class="col">
+              <label>Date de cloture :</label>
+              <div class="input-group mt-2">
+                  <input type="date" name="dateDebutCreation" class="form-control col">
+              </div>
+              <div class="input-group mt-2">
+                  <input type="date" name="dateFinCreation" class="form-control col">
+              </div>
+            </div>
+            <div class="col">
+              <label>Date d'installation :</label>
+              <div class="input-group mt-2">
+                  <input type="date" name="dateDebutCloture"  class="form-control col">
+              </div>
+              <div class="input-group mt-2">
+                  <input type="date" name="dateFinCloture" class="form-control col">
+              </div>
+            </div>
+          </div>
+                
+          <table class="table table-striped table-bordered mt-5">
+              <thead><br>
+                <tr>
+                  <th scope="col">Client</th>
+                  <th scope="col">Partenaire</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Récurrent</th>
+                  <th scope="col">DateCloture</th>
+                  <th scope="col">DateInstallation</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for e in info %}
+                  <tr>
+                    <form method="post" action="/recurrent/maj/" id="form-maj{{e.id}}">{% csrf_token %}
+                  {% for cli in client %}
+                      {% if cli.id == e.cli_id %}
+                          <td class="client_td">{{cli.nom}}</td>
+                      {% endif %}
+                  {% endfor %}
+                  {% for part in partenaire %}
+                      {% if part.id == e.partenaire_id %}
+                          <td class="partenaire_td">{{part.nom}}</td>
+                      {% endif %}
+                  {% endfor %}
+                  {% for typ in type %}
+                      {% if typ.id == e.typ_id %}
+                          <td class="type_td">{{typ.nom}}</td>
+                      {% endif %}
+                  {% endfor %}
+                      <td>{{ e.recurrent }}</td>
+                      <td><script>
+                        d = new Date("{{e.dateCloture}}")
+                        ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
+                        mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
+                        document.write(`${mo} ${ye}`);
+                      </script></td>
+                      <td><script>
+                        d = new Date("{{e.dateInstallation}}")
+                        ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
+                        mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
+                        da = new Intl.DateTimeFormat('fr', { day: 'numeric' }).format(d)
+                        document.write(`${da} ${mo} ${ye}`);
+                      </script></td>
+                      <td><button type="button" form="form-maj{{e.id}}" class="btn btn-secondary modifier">Modifier</button></td></form>
+                  </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+            <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
-    </main>
-<!-- Footer -->
-{% include 'layouts/footer.html' %}
+            <script>
+                
+                $(".modifier").click(function() {
+                    id = $(this).attr('form')
+                    $(this).parent().parent().eq(0).find("td").each(function(x,cpt){
+                        if(x == 5){
+                            console.log($(this).text())
+                            if($(this).text() != "None"){
+                                $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='dateinstallation' value ='"+`${da}-${mo}-${ye}`+"'/>")   
+                            } else {
+                                $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='dateinstallation'/>")   
+                            }
+                         } else if(x == 6){
+                            idform = id.replace("form-maj","")
+                            $(this).html('<input type="hidden" form="'+id+'" name="formid" value="'+idform+'" /> <button type="submit" form="'+id+'" class="btn btn-success mt-2 my-sm-0">Valider</button>')
+                        }
+                    })
+                  });   
+                </script>
+      </main>
+    <!-- Footer -->
+    {% include 'layouts/footer.html' %}

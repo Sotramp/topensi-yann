@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^filter/$', FilterInfoView.as_view()),
     url(r'^update/delete/$', DeleteInfo.as_view()),
     url(r'^update/maj/$', UpdateInfo.as_view()),
+    url(r'^recurrent/maj/$', UpdateRecurrent.as_view()),
 ]
