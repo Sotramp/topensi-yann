@@ -80,19 +80,8 @@
                       {% endif %}
                   {% endfor %}
                       <td>{{ e.recurrent }}</td>
-                      <td><script>
-                        d = new Date("{{e.dateCloture}}")
-                        ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
-                        mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
-                        document.write(`${mo} ${ye}`);
-                      </script></td>
-                      <td><script>
-                        d = new Date("{{e.dateInstallation}}")
-                        ye = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(d)
-                        mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(d)
-                        da = new Intl.DateTimeFormat('fr', { day: 'numeric' }).format(d)
-                        document.write(`${da} ${mo} ${ye}`);
-                      </script></td>
+                      <td>{{e.dateCloture}}</td>
+                      <td>{{e.dateInstallation}}</td>
                       <td><button type="button" form="form-maj{{e.id}}" class="btn btn-secondary modifier">Modifier</button></td></form>
                   </tr>
               {% endfor %}
@@ -106,9 +95,12 @@
                     id = $(this).attr('form')
                     $(this).parent().parent().eq(0).find("td").each(function(x,cpt){
                         if(x == 5){
-                            console.log($(this).text())
                             if($(this).text() != "None" && $(this).text() !=""){
-                                $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='dateinstallation' value ='"+`${da}-${mo}-${ye}`+"'/>")   
+                                d = new Date($(this).text())
+                                da = new Intl.DateTimeFormat('en', { day: 'numeric' }).format(d)
+                                ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+                                mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
+                                $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='dateinstallation' value ='"+`${ye}-${mo}-${da}`+"'/>")   
                             } else {
                                 $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='dateinstallation'/>")   
                             }
