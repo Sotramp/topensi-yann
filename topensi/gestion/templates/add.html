@@ -84,8 +84,8 @@
                         </select>
                     </div>
                     <div class="form-inline">
-                        <input type="number" name="marge" class="form-control col" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Marge">
-                        <input type="number" name="recurrent" class="form-control col" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Récurrent">
+                        <input type="number" step="0.01" name="marge" class="form-control col" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Marge">
+                        <input type="number" step="0.01" name="recurrent" class="form-control col" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Récurrent">
                         <select class="custom-select col" name="etat">
                             {% for e in etat %}
                                 <option value="{{e.nom}}">{{e.nom}}</option>
