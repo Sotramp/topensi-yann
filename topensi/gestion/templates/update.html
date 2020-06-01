@@ -264,7 +264,7 @@
                       facture = "Oui"
                     }
                     if(ye2 != '1970'){
-                      $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>'+`${mo2} ${ye2}`+'</td> <td> <button type="button" form="form-maj'+json[i].pk+'" class="btn btn-secondary modifier">Modifier</button> </td> <td><button type="submit" form="form-del'+json[i].pk+'" class="btn btn-danger">Supprimer</button> </td> </tr>');
+                      $('tbody').append('<tr> <form method="post" action="/update/maj/" id="form-maj'+json[i].pk+'">{% csrf_token %}</form><td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>'+`${mo2} ${ye2}`+'</td> <td> <button type="button" form="form-maj'+json[i].pk+'" class="btn btn-secondary modifier">Modifier</button> </td> <td><button type="submit" form="form-del'+json[i].pk+'" class="btn btn-danger">Supprimer</button> </td> </tr>');
                     } else {
                       $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td> <button type="button" form="form-maj'+json[i].pk+'" class="btn btn-secondary modifier">Modifier</button> </td> <td><button type="submit" form="form-del'+json[i].pk+'" class="btn btn-danger">Supprimer</button> </td> </tr> </td> <td>Pas encore cloturé</td> </tr>');
                     }
@@ -335,7 +335,8 @@
                                 }
                             } else if(x == 9){
                                 idform = id.replace("form-maj","")
-                                $(this).html('<input type="hidden" form="'+id+'" name="formid" value="'+idform+'" /> <button type="submit" form="'+id+'" class="btn btn-success mt-2 my-sm-0">Valider</button>')
+                                middle = jQuery("[name=csrfmiddlewaretoken]").val()
+                                $(this).html('<input type="hidden" form="'+id+'" name="csrfmiddlewaretoken" value="'+middle+'" /><input type="hidden" form="'+id+'" name="formid" value="'+idform+'" /> <button type="submit" form="'+id+'" class="btn btn-success mt-2 my-sm-0">Valider</button>')
                             }
                         })
                     });
