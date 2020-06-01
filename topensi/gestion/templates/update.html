@@ -208,13 +208,13 @@
             } else if(x == 7){
                 d = new Date($(this).text())
                 ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
-                mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d)
+                mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
                 $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecreation' value ='"+`${ye}-${mo}`+"'/>")    
             } else if(x == 8){
                 if($(this).text() != 'Pas encore cloturé'){ 
                     d = new Date($(this).text())
                     ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
-                    mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d)
+                    mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
                     $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecloture' value ='"+`${ye}-${mo}`+"'/>")
                 } else {
                     $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecloture' />")
