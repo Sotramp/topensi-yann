@@ -113,8 +113,19 @@
                       {% endif %}
                   {% endfor %}
                       <td>{{ e.recurrent }}</td>
-                      <td>{{e.dateCloture}}</td>
-                      <td>{{e.dateInstallation}}</td>
+                      <td><script>
+                        d = new Date("{{e.dateCloture}}")
+                        ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+                        mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d)
+                        document.write(`${mo} ${ye}`)
+                    </script></td>
+                      <td><script>
+                        d = new Date("{{e.dateInstallation}}")
+                        ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+                        mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d)
+                        da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
+                        document.write(`${da} ${mo} ${ye}`)
+                    </script></td>
                       <td><button type="button" form="form-maj{{e.id}}" class="btn btn-secondary modifier">Modifier</button></td></form>
                   </tr>
               {% endfor %}
@@ -142,7 +153,6 @@
                       },
                       success : function(json, statut){
                         var json = JSON.parse(JSON.stringify(json))
-                        console.log(json)
                         $('table').html('<thead><tr><th scope="col">Client</th><th scope="col">Partenaire</th><th scope="col">Type</th><th scope="col">Récurrent</th><th scope="col">Date de cloture</th><th scope="col">Date installation</th></tr> </thead><tbody></tbody>')
                         $('.recurrent-total').text("0 €")
                         if(json.length==0){
@@ -159,25 +169,18 @@
                             } else {
                               facture = "Oui"
                             }
-                            if(ye2 != '1970'){
-                              $('tbody').append('<tr> <form method="post" action="/recurrent/maj/" id="form-maj'+json[i].pk+'">{% csrf_token %}</form><td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td>'+json[i].fields.dateCloture+'</td> <td>'+json[i].fields.dateInstallation+'</td><td><button type="button" form="form-maj'+json[i].pk+'" class="btn btn-secondary modifier">Modifier</button></td></tr>');
-                            } else {
-                              $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.recurrent * 100) / 100).toFixed(2)+'</td> <td>'+json[i].fields.dateCloture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>Pas encore cloturé</td> </tr>');
-                            }
+                            $('tbody').append('<tr> <form method="post" action="/recurrent/maj/" id="form-maj'+json[i].pk+'">{% csrf_token %}</form><td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td>'+`${mo2} ${ye2}`+'</td> <td>'+`${da} ${mo1} ${ye1}`+'</td><td><button type="button" form="form-maj'+json[i].pk+'" class="btn btn-secondary modifier">Modifier</button></td></tr>');
                             $('.marge-total').text((parseInt($('.marge-total').text())+json[i].fields.marge)+" €")
                             $('.recurrent-total').text((parseInt($('.recurrent-total').text())+json[i].fields.recurrent)+" €")
                             $(".modifier").click(function() {
                               id = $(this).attr('form')
-                              console.log("ok")
                               $(this).parent().parent().eq(0).find("td").each(function(x,cpt){
-                                  console.log(x)
                                   if(x == 5){
-                                      if($(this).text() != "None" && $(this).text() !=""){
-                                          console.log($(this).text())
-                                          d = new Date($(this).text())
-                                          da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
-                                          ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
-                                          mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
+                                    if($(this).children().not("script").text() != "None" && $(this).children().not("script").text() !=""){
+                                      d = new Date($(this).text())
+                                      da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
+                                      ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+                                      mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
                                           $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='dateinstallation' value ='"+`${ye}-${mo}-${da}`+"'/>")   
                                       } else {
                                           $(this).html("<input style='width : 100%;' type='date' form='"+id+"' name='dateinstallation'/>")   
@@ -199,11 +202,11 @@
                   })
                   $(".modifier").click(function() {
                     id = $(this).attr('form')
-                    console.log("ok")
                     $(this).parent().parent().eq(0).find("td").each(function(x,cpt){
-                        console.log(x)
+                      console.log(x)
+
                         if(x == 5){
-                            if($(this).text() != "None" && $(this).text() !=""){
+                            if($(this).children().not("script").text() != "None" && $(this).children().not("script").text() !=""){
                                 d = new Date($(this).text())
                                 da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
                                 ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
