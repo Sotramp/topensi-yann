@@ -274,13 +274,13 @@
                     if(ye2 != '1970'){
                       $('tbody').append('<tr> <form method="post" action="/update/maj/" id="form-maj'+json[i].pk+'">{% csrf_token %}</form><td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>'+`${mo2} ${ye2}`+'</td> <td> <button type="button" form="form-maj'+json[i].pk+'" class="btn btn-secondary modifier">Modifier</button> </td> <td><button type="submit" form="form-del'+json[i].pk+'" class="btn btn-danger">Supprimer</button> </td> </tr>');
                     } else {
-                      $('tbody').append('<tr> <td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td> <button type="button" form="form-maj'+json[i].pk+'" class="btn btn-secondary modifier">Modifier</button> </td> <td><button type="submit" form="form-del'+json[i].pk+'" class="btn btn-danger">Supprimer</button> </td> </tr> </td> <td>Pas encore cloturé</td> </tr>');
+                      $('tbody').append('<tr> <form method="post" action="/update/maj/" id="form-maj'+json[i].pk+'">{% csrf_token %}</form><td class="client_td">'+$("#client option[value='"+json[i].fields.cli+"']").text()+'</td> <td class="partenaire_td">'+$("#partenaire option[value='"+json[i].fields.partenaire+"']").text()+'</td> <td class="type_td">'+$("#type option[value='"+json[i].fields.typ+"']").text()+'</td> <td>'+(Math.round(json[i].fields.marge * 100) / 100).toFixed(2)+'</td> <td>'+(Math.round(json[i].fields.recurrent * 10) / 10).toFixed(1)+'</td> <td class="etat_td">'+$("#etat option[value='"+json[i].fields.etat+"']").text()+'</td> <td>'+facture+'</td> <td>'+`${mo1} ${ye1}`+'</td> <td>'+`${mo2} ${ye2}`+'</td> <td> <button type="button" form="form-maj'+json[i].pk+'" class="btn btn-secondary modifier">Modifier</button> </td> <td><button type="submit" form="form-del'+json[i].pk+'" class="btn btn-danger">Supprimer</button> </td> </tr>');
                     }
                     $('.marge-total').text((parseInt($('.marge-total').text())+json[i].fields.marge)+" €")
                     $('.recurrent-total').text((parseInt($('.recurrent-total').text())+json[i].fields.recurrent)+" €")
                     $(".modifier").click(function() {
                         id = $(this).attr('form')
-                        $(this).parent().parent().parent().parent().eq(0).find("td").each(function(x,cpt){
+                        $(this).parent().parent().eq(0).find("td").each(function(x,cpt){
                             if(x == 0){
                                 before = $(this).text()
                                 $(this).html('<select style="width : 100%;" class="custom-select"  form="'+id+'" name="client"><option>Selectionnez le client</option>{% for e in client %}<option>{{e.nom}}</option>{% endfor %}</select>')
@@ -330,15 +330,11 @@
                                 ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
                                 mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
                                 $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecreation' value ='"+`${ye}-${mo}`+"'/>")    
-                            } else if(x == 8){
-                                if($(this).text() != 'Pas encore cloturé'){ 
+                            } else if(x == 8){ 
                                     d = new Date($(this).text())
                                     ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
                                     mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
                                     $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecloture' value ='"+`${ye}-${mo}`+"'/>")
-                                } else {
-                                    $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecloture' />")
-                                }
                             } else if(x == 9){
                                 idform = id.replace("form-maj","")
                                 middle = jQuery("[name=csrfmiddlewaretoken]").val()
