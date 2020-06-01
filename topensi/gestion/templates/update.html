@@ -254,10 +254,10 @@
                   $('tbody').append("<tr><td colspan='8'>Aucune donnée<td></tr>")
                 }
                 for (var i=0;i<json.length;++i){
-                    ye1 = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(new Date(json[i].fields.dateCreation))
-                    mo1 = new Intl.DateTimeFormat('fr', { month: 'short' }).format(new Date(json[i].fields.dateCreation))
-                    ye2 = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(new Date(json[i].fields.dateCloture))
-                    mo2 = new Intl.DateTimeFormat('fr', { month: 'short' }).format(new Date(json[i].fields.dateCloture))
+                    ye1 = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(new Date(json[i].fields.dateCreation))
+                    mo1 = new Intl.DateTimeFormat('en', { month: 'short' }).format(new Date(json[i].fields.dateCreation))
+                    ye2 = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(new Date(json[i].fields.dateCloture))
+                    mo2 = new Intl.DateTimeFormat('en', { month: 'short' }).format(new Date(json[i].fields.dateCloture))
                     if(json[i].fields.facture == false){
                       facture = "Non"
                     } else {
