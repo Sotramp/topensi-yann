@@ -126,8 +126,18 @@
                     {% endif %}
                 {% endfor %}
                     <td>{% if e.facture %}Oui{% else %}Non{% endif %}</td>
-                    <td>{{e.dateCreation}}</td>
-                    <td>{{e.dateCloture}}</td>
+                    <td><script>
+                        d = new Date("{{e.dateCreation}}")
+                        ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+                        mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d)
+                        document.write(`${mo} ${ye}`)
+                    </script></td>
+                    <td><script>
+                        d = new Date("{{e.dateCloture}}")
+                        ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+                        mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d)
+                        document.write(`${mo} ${ye}`)
+                    </script></td>
                     <td>
                         <div class="row">
                             <div class="col text-center">
@@ -191,8 +201,6 @@
                 before = $(this).text()
                 $(this).html('<select style="width : 100%;"class="custom-select"  form="'+id+'" name="facture"><option>Selectionnez facture</option><option value="True">Oui</option><option value="False">Non</option></select>')
                 $(this).find("option").each(function(){
-                    console.log("before: "+before)
-                    console.log("this: "+$(this).text())
                     if($(this).text() == before){
                         $(this).prop("selected", "selected")
                     }
@@ -200,13 +208,13 @@
             } else if(x == 7){
                 d = new Date($(this).text())
                 ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
-                mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
+                mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d)
                 $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecreation' value ='"+`${ye}-${mo}`+"'/>")    
             } else if(x == 8){
                 if($(this).text() != 'Pas encore cloturé'){ 
                     d = new Date($(this).text())
                     ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
-                    mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
+                    mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d)
                     $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecloture' value ='"+`${ye}-${mo}`+"'/>")
                 } else {
                     $(this).html("<input style='width : 100%;' type='month' form='"+id+"' name='datecloture' />")
@@ -254,10 +262,10 @@
                   $('tbody').append("<tr><td colspan='8'>Aucune donnée<td></tr>")
                 }
                 for (var i=0;i<json.length;++i){
-                    ye1 = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(new Date(json[i].fields.dateCreation))
-                    mo1 = new Intl.DateTimeFormat('fr', { month: 'short' }).format(new Date(json[i].fields.dateCreation))
-                    ye2 = new Intl.DateTimeFormat('fr', { year: 'numeric' }).format(new Date(json[i].fields.dateCloture))
-                    mo2 = new Intl.DateTimeFormat('fr', { month: 'short' }).format(new Date(json[i].fields.dateCloture))
+                    ye1 = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(new Date(json[i].fields.dateCreation))
+                    mo1 = new Intl.DateTimeFormat('en', { month: 'short' }).format(new Date(json[i].fields.dateCreation))
+                    ye2 = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(new Date(json[i].fields.dateCloture))
+                    mo2 = new Intl.DateTimeFormat('en', { month: 'short' }).format(new Date(json[i].fields.dateCloture))
                     if(json[i].fields.facture == false){
                       facture = "Non"
                     } else {
@@ -313,8 +321,6 @@
                                 before = $(this).text()
                                 $(this).html('<select style="width : 100%;"class="custom-select"  form="'+id+'" name="facture"><option>Selectionnez facture</option><option value="True">Oui</option><option value="False">Non</option></select>')
                                 $(this).find("option").each(function(){
-                                    console.log("before: "+before)
-                                    console.log("this: "+$(this).text())
                                     if($(this).text() == before){
                                         $(this).prop("selected", "selected")
                                     }
