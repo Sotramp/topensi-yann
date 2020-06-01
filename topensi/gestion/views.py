@@ -120,10 +120,14 @@ class AjouterEtatView(TemplateView):
   template_name = "index.html"
   def post(self, request, **kwargs):
     type = request.POST.get('etat', False)
-    c = Etat(nom=type)
-    c.save()
-    messages.success(request, 'Le etat a bien été ajouté')
-    return HttpResponseRedirect( "/add/" )
+    try:
+      c = Etat(nom=type)
+      c.save()
+      messages.success(request, 'Le etat a bien été ajouté')
+      return HttpResponseRedirect( "/add/" )
+    except:
+      messages.error(request, "Impossible d'ajouter l'état")
+      return HttpResponseRedirect( "/update/")
 
 class AjouterInfoView(TemplateView):
   template_name = "index.html"
@@ -145,16 +149,16 @@ class AjouterInfoView(TemplateView):
     facture = request.POST.get('facture', False)
     dateCreation = request.POST.get('dateCreation', False)
     dateCloture = request.POST.get('dateCloture', False)
-    #try:
-    if(dateCloture == ''):
-      dateCloture = "1970-01"
-    i = Info(cli=client_id, partenaire=partenaire_id, typ=type_id, etat=etat_id,marge=marge, recurrent=recurrent, facture=facture, dateCloture = dateCloture, dateCreation = dateCreation)
-    i.save()
-    messages.success(request, "L'info a bien été ajoutée")
-    return HttpResponseRedirect( "/add/" )
-    #except:
-    #  messages.error(request, "Impossible d'ajouter l'info")
-    #  return HttpResponseRedirect( "/add/" )
+    try:
+      if(dateCloture == ''):
+        dateCloture = "1970-01"
+      i = Info(cli=client_id, partenaire=partenaire_id, typ=type_id, etat=etat_id,marge=marge, recurrent=recurrent, facture=facture, dateCloture = dateCloture, dateCreation = dateCreation)
+      i.save()
+      messages.success(request, "L'info a bien été ajoutée")
+      return HttpResponseRedirect( "/add/" )
+    except:
+      messages.error(request, "Impossible d'ajouter l'info")
+      return HttpResponseRedirect( "/add/" )
 
 class FilterInfoView(TemplateView):
   template_name = "index.html"
@@ -167,7 +171,11 @@ class FilterInfoView(TemplateView):
     dcloture = request.POST.get('dcloture', False)
     fcloture = request.POST.get('fcloture', False)
     client = request.POST.get('client', False)
-    to_send = Info.objects.all()
+    try:
+      to_send = Info.objects.all()
+    except:
+      messages.error(request, "Impossible de récupérer les infos")
+      return HttpResponseRedirect( "/update/")
     exclude = []
     if fcreation != '':
       for e in to_send:
@@ -205,9 +213,13 @@ class DeleteInfo(TemplateView):
   template_name = 'update.html'
   def post(self, request, **kwargs):
     infoid = request.POST.get('info_id', False)
-    Info.objects.filter(id=infoid).delete()
-    messages.success(request, "L'info a bien été supprimée")
-    return HttpResponseRedirect( "/update/" )
+    try:
+      Info.objects.filter(id=infoid).delete()
+      messages.success(request, "L'info a bien été supprimée")
+      return HttpResponseRedirect( "/update/" )
+    except:
+      messages.error(request, "Impossible de supprimer l'info")
+      return HttpResponseRedirect( "/update/")
 
 class UpdateInfo(TemplateView):
   template_name = 'update.html'
@@ -223,38 +235,35 @@ class UpdateInfo(TemplateView):
     etatnom = request.POST.get('etat', False)
     if(dateCloture == ''):
       dateCloture = '1970-01'
-    clientid = Client.objects.get(nom=clientnom).id
-    partenaireid = Partenaire.objects.get(nom=partenairenom).id
-    typeid = Type.objects.get(nom=typenom).id
-    etatid = Etat.objects.get(nom=etatnom).id
-    #except:
-    #messages.error(request, 'Mauvaise saisie')
-    #return HttpResponseRedirect( "/update/" )
+    try:
+      clientid = Client.objects.get(nom=clientnom).id
+      partenaireid = Partenaire.objects.get(nom=partenairenom).id
+      typeid = Type.objects.get(nom=typenom).id
+      etatid = Etat.objects.get(nom=etatnom).id
+    except:
+      messages.error(request, "Impossible de récupérer l'info")
+      return HttpResponseRedirect( "/update/")
     formid = request.POST.get('formid', False)
-    #try:
-    Info.objects.filter(id=formid).update(recurrent=recurrent, facture=facture, marge=marge, dateCloture=dateCloture, dateCreation=dateCreation, cli_id=clientid, typ_id = typeid, partenaire_id=partenaireid, etat_id=etatid) 
-    messages.success(request, "L'info a bien été modifiée")
-    return HttpResponseRedirect( "/update/" )
-    #except:
-      #messages.error(request, "Impossible de mettre a jour l'info")
-      #return HttpResponseRedirect( "/update/" )
+    try:
+      Info.objects.filter(id=formid).update(recurrent=recurrent, facture=facture, marge=marge, dateCloture=dateCloture, dateCreation=dateCreation, cli_id=clientid, typ_id = typeid, partenaire_id=partenaireid, etat_id=etatid) 
+      messages.success(request, "L'info a bien été modifiée")
+      return HttpResponseRedirect( "/update/" )
+    except:
+      messages.error(request, "Impossible de mettre a jour l'info")
+      return HttpResponseRedirect( "/update/" )
 
 class UpdateRecurrent(TemplateView):
   template_name = 'recurrent.html'
   def post(self, request, **kwargs):
     dateInstallation = request.POST.get('dateinstallation', False)
-    #except:
-    #messages.error(request, 'Mauvaise saisie')
-    #return HttpResponseRedirect( "/update/" )
     formid = request.POST.get('formid', False)
-    print(dateInstallation)
-    #try:
-    Info.objects.filter(id=formid).update(dateInstallation=dateInstallation) 
-    messages.success(request, "L'info a bien été modifiée")
-    return HttpResponseRedirect( "/recurrent/" )
-    #except:
-      #messages.error(request, "Impossible de mettre a jour l'info")
-      #return HttpResponseRedirect( "/update/" )
+    try:
+      Info.objects.filter(id=formid).update(dateInstallation=dateInstallation) 
+      messages.success(request, "L'info a bien été modifiée")
+      return HttpResponseRedirect( "/recurrent/" )
+    except:
+      messages.error(request, "Impossible de mettre a jour l'info")
+      return HttpResponseRedirect( "/recurrent/" )
 
 class FilterRecurrentView(TemplateView):
   template_name = "index.html"
@@ -263,7 +272,11 @@ class FilterRecurrentView(TemplateView):
     finstall = request.POST.get('finstall', False)
     dcloture = request.POST.get('dcloture', False)
     fcloture = request.POST.get('fcloture', False)
-    to_send = Info.objects.all()
+    try:
+      to_send = Info.objects.all()
+    except:
+      messages.error(request, "Impossible de récupérer les infos")
+      return HttpResponseRedirect( "/update/")
     exclude = []
     if finstall != '':
       for e in to_send:
