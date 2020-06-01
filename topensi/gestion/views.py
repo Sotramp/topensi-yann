@@ -16,6 +16,9 @@ from django.http import JsonResponse
 import month
 from django.core import serializers
 import datetime
+import csv
+from urllib.parse import urlparse  # Python 3 
+
 # Create your views here.
 class IndexView(TemplateView):
   template_name = 'index.html'
@@ -302,3 +305,23 @@ class FilterRecurrentView(TemplateView):
     leads_as_json = serializers.serialize('json', to_send)
     print(leads_as_json)
     return HttpResponse(leads_as_json, content_type='json')
+
+class ExportView(TemplateView):
+  template_name = "index.html"
+  def get(self, request, **kwargs):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="bilan.csv"'
+    writer = csv.writer(response)
+    print(urlparse(request.META.get('HTTP_REFERER')).path)
+    if urlparse(request.META.get('HTTP_REFERER')).path != '/recurrent/':
+      writer.writerow(['Client', 'Partenaire', 'Type', 'Marge', 'Recurrent','Etat','Facturé','Date de création','Date de cloture'])
+      infos = Info.objects.all().values_list('cli__nom', 'partenaire__nom', 'typ__nom', 'marge', 'recurrent', 'etat','facture','dateCreation','dateCloture')
+      for info in infos:
+        writer.writerow(info)    
+      return response
+    else:
+      writer.writerow(['Client', 'Partenaire', 'Type', 'Recurrent','Date de cloture','Date d\'installation'])
+      infos = Info.objects.all().values_list('cli__nom', 'partenaire__nom', 'typ__nom', 'recurrent', 'dateCloture', 'dateInstallation')
+      for info in infos:
+        writer.writerow(info)    
+      return response
