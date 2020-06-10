@@ -23,11 +23,11 @@ from urllib.parse import urlparse  # Python 3
 class IndexView(TemplateView):
   template_name = 'index.html'
   def get(self, request, **kwargs):
-    info = Info.objects.all()
+    info = Info.objects.all().order_by('dateCreation')
     client = Client.objects.all()
     partenaire = Partenaire.objects.all()
     etat = Etat.objects.all()
-    type = Type.objects.all()
+    type = Type.objects.all() 
     return render(request, self.template_name, {'info' : info, 'client': client, 'partenaire': partenaire, 'type' : type, 'etat': etat})
 
 class AddView(TemplateView):
