@@ -53,7 +53,7 @@ class UpdateView(TemplateView):
 class RecurrentView(TemplateView):
   template_name = 'recurrent.html'
   def get(self, request, **kwargs):
-    info = Info.objects.all()
+    info = Info.objects.filter(recurrent__gte=1)
     client = Client.objects.all()
     partenaire = Partenaire.objects.all()
     etat = Etat.objects.all()
