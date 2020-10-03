@@ -1,3 +1,4 @@
 # topensi-yann
 
-Some code about my internship at Topensi
+This is a project made during my internship in the Topensi company
+Made with Python and Django
